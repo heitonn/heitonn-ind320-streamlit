@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 
 st.header("Visualizing weather data")
@@ -9,7 +10,10 @@ st.write("Select a column and a month range to visualize the data. Use 'All colu
 # Reading data 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"open-meteo-subset.csv")
+    base_dir = os.path.dirname(os.path.dirname(__file__))  # .. går opp en mappe
+    csv_path = os.path.join(base_dir, "open-meteo-subset.csv")
+
+    df = pd.read_csv(csv_path)
     df["time"] = pd.to_datetime(df["time"])
     df.set_index("time", inplace=True)
     return df

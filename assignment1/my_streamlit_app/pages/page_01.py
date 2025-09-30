@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os 
 
 st.header('Weatherdata January 2020 overview')
 
@@ -10,8 +11,10 @@ st.write("This table shows the first month (January 2020) "
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"open-meteo-subset.csv")
+    base_dir = os.path.dirname(os.path.dirname(__file__))  # .. går opp en mappe
+    csv_path = os.path.join(base_dir, "open-meteo-subset.csv")
 
+    df = pd.read_csv(csv_path)
    
     df["time"] = pd.to_datetime(df["time"])
     df.set_index("time", inplace=True)
