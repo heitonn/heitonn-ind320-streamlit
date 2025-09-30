@@ -10,7 +10,9 @@ st.write("This table shows the first month (January 2020) "
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"C:\Users\heito\Documents\IND320\assignment1\my_streamlit_app\open-meteo-subset.csv")
+    df = pd.read_csv(r"open-meteo-subset.csv")
+
+   
     df["time"] = pd.to_datetime(df["time"])
     df.set_index("time", inplace=True)
     return df
