@@ -18,7 +18,6 @@ cluster = st.secrets["mongo"]["cluster"]
 
 # Sett opp URI
 uri = f"mongodb+srv://{usr}:{pwd}@{cluster}.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-client = MongoClient(uri)
 
 # Cache data 
 @st.cache_data
@@ -27,6 +26,8 @@ def load_data():
     db = client["energy_database"]
     collection = db["energy_collection"]
     data = list(collection.find())
+    client.close() # closing Mongo connection 
+
     df = pd.DataFrame(data)
     df['starttime'] = pd.to_datetime(df['starttime'])
     if '_id' in df.columns:
