@@ -1,93 +1,86 @@
 import streamlit as st
 
-st.header('Hello page 4')
-import streamlit as st
-import pandas as pd
-from pymongo import MongoClient
-import matplotlib.pyplot as plt
+# Title and wide layout
+st.set_page_config(layout="wide")
+st.header("Never gonna give you up... " )
 
-# --- Bred layout ---
-st.set_page_config(page_title="Energy Dashboard", layout="wide")
+# Dividing page in two columns
+col1, col2 = st.columns(2)
 
-# --- Les MongoDB secrets ---
-usr = st.secrets["mongo"]["username"]
-pwd = st.secrets["mongo"]["password"]
-cluster = st.secrets["mongo"]["cluster"]
-
-uri = f"mongodb+srv://{usr}:{pwd}@{cluster}.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-# --- Cache data-henting for raskere interaktivitet ---
-@st.cache_data
-def load_data():
-    client = MongoClient(uri)
-    db = client["energy_database"]
-    collection = db["energy_collection"]
-    data = list(collection.find())
-    df = pd.DataFrame(data)
-    df['starttime'] = pd.to_datetime(df['starttime'])
-    if '_id' in df.columns:
-        df = df.drop(columns=['_id'])
-    df['month'] = df['starttime'].dt.month_name()
-    return df
-
-df = load_data()
-
-# --- Del siden i kolonner med ulik bredde ---
-col1, col2 = st.columns([2, 3])
-
-# ----------------------- KOLONNE 1: Pie chart -----------------------
 with col1:
-    st.subheader("Total Production per Group")
+    st.write("""
+            We're no strangers to love  
+            You know the rules and so do I (Do I)  
+            A full commitment's what I'm thinking of  
+            You wouldn't get this from any other guy  
+            I just wanna tell you how I'm feeling  
+            Gotta make you understand  
 
-    # Velg område
-    areas = df['area'].unique().tolist()
-    chosen_area = st.radio("Velg price area:", areas)
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you  
 
-    # Filtrer og summer per produksjonsgruppe
-    df_area = df[df['area'] == chosen_area]
-    group_sum = df_area.groupby('productiongroup')['quantitykwh'].sum().reset_index()
-    total = group_sum['quantitykwh'].sum()
+            We've known each other for so long  
+            Your heart's been aching, but you're too shy to say it (To say it)  
+            Inside, we both know what's been going on (Going on)  
+            We know the game, and we're gonna play it  
 
-    # Pie chart
-    fig, ax = plt.subplots(figsize=(5, 5))
-    wedges, _ = ax.pie(group_sum['quantitykwh'], labels=None, startangle=90)
+            And if you ask me how I'm feeling  
+            Don't tell me you're too blind to see  
 
-    # Legend med prosent
-    labels = [f"{grp} ({val/total*100:.1f}%)" for grp, val in zip(group_sum['productiongroup'], group_sum['quantitykwh'])]
-    ax.legend(wedges, labels, title="Production Group", loc="center left", bbox_to_anchor=(-0.3, 0.75))
-    ax.set_title(f"Total Production by Group in {chosen_area} (2021)")
-    st.pyplot(fig)
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you  
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you  
+
+            Ooh (Give you up)  
+            Ooh-ooh (Give you up)  
+            Ooh-ooh  
+            Never gonna give, never gonna give (Give you up)  
+            Ooh-ooh  
+            Never gonna give, never gonna give (Give you up)  
+
+            We've known each other for so long  
+            Your heart's been aching, but you're too shy to say it (To say it)  
+            Inside, we both know what's been going on (Going on)  
+            We know the game, and we're gonna play it  
+
+            I just wanna tell you how I'm feeling  
+            Gotta make you understand  
+
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you  
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you  
+            Never gonna give you up  
+            Never gonna let you down  
+            Never gonna run around and desert you  
+            Never gonna make you cry  
+            Never gonna say goodbye  
+            Never gonna tell a lie and hurt you
+            """)
+with col2:
+    st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
 
 # ----------------------- KOLONNE 2: Line plot -----------------------
-with col2:
-    st.subheader("Production Over Time")
 
-    # Velg produksjonsgrupper (flere)
-    all_groups = df['productiongroup'].unique().tolist()
-    selected_groups = st.multiselect("Velg produksjonsgruppe(r):", all_groups, default=[all_groups[0]])
-
-    # Velg måned
-    months = df['month'].unique().tolist()
-    chosen_month = st.selectbox("Velg måned:", months)
-
-    # Filtrer data
-    df_filtered = df[
-        (df['area'] == chosen_area) &
-        (df['productiongroup'].isin(selected_groups)) &
-        (df['month'] == chosen_month)
-    ]
-
-    # Line plot
-    if not df_filtered.empty:
-        fig, ax = plt.subplots(figsize=(10, 4))
-        for group in selected_groups:
-            df_group = df_filtered[df_filtered['productiongroup'] == group].sort_values('starttime')
-            ax.plot(df_group['starttime'], df_group['quantitykwh'], marker='o', label=group)
-        ax.set_xlabel("Dato")
-        ax.set_ylabel("Produksjon (kWh)")
-        ax.set_title(f"Produksjon i {chosen_area} - {chosen_month}")
-        ax.legend()
-        plt.xticks(rotation=45)
-        st.pyplot(fig)
-    else:
-        st.write("Ingen data for valgt kombinasjon.")
