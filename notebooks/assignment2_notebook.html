@@ -7519,16 +7519,27 @@ a.anchor-link {
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Assignment-2">Assignment 2<a class="anchor-link" href="#Assignment-2">¶</a></h1><h2 id="LOG">LOG<a class="anchor-link" href="#LOG">¶</a></h2><ul>
 <li>GitHub repository: <a href="https://github.com/heitonn/heitonn-ind320-streamlit">https://github.com/heitonn/heitonn-ind320-streamlit</a></li>
-<li>Streamlit app (deployed): <a href="https://heitonn-ind320-app-jxcqyxefi4nb9vsppba5ca.streamlit.app/">https://heitonn-ind320-app-jxcqyxefi4nb9vsppba5ca.streamlit.app/</a></li>
+<li>Streamlit app (deployed): <a href="https://heitonn-ind320-app-f47sdqdeqpztcmyzrejxo4.streamlit.app/">https://heitonn-ind320-app-f47sdqdeqpztcmyzrejxo4.streamlit.app/</a></li>
 </ul>
-<h3 id="API-Request-and-EDA">API Request and EDA<a class="anchor-link" href="#API-Request-and-EDA">¶</a></h3><p>I started by importing the necessary libraries and extensions. I used the requests library to fetch energy data from the Elhub API. At first, I had some problems understanding the structure of the JSON response and finding the production data.</p>
+<h4 id="API-Request-and-EDA">API Request and EDA<a class="anchor-link" href="#API-Request-and-EDA">¶</a></h4><p>I started by importing the necessary libraries and extensions. I used the requests library to fetch energy data from the Elhub API. At first, I had some problems understanding the structure of the JSON response and finding the production data.</p>
 <p>After some exploration, I located the correct field and converted the response into a Pandas DataFrame called df_raw. I also observed how Elhub handles daylight saving time and used UTC=True to avoid time conflicts.</p>
 <p>Before moving on, I performed a small exploratory data analysis (EDA) to get an overview of the dataset. I created a simple table and two bar plots, which showed that most of the energy production in Norway comes from hydro power.</p>
-<h3 id="Spark-and-Cassandra">Spark and Cassandra<a class="anchor-link" href="#Spark-and-Cassandra">¶</a></h3><p>This was the most challenging part of the assignment. I had several problems with Java and the Spark–Cassandra connection. After troubleshooting and reinstalling Java correctly, I finally managed to connect.</p>
+<h4 id="Spark-and-Cassandra">Spark and Cassandra<a class="anchor-link" href="#Spark-and-Cassandra">¶</a></h4><p>This was the most challenging part of the assignment. I had several problems with Java and the Spark–Cassandra connection. After troubleshooting and reinstalling Java correctly, I finally managed to connect.</p>
 <p>Using Spark, I extracted the columns priceArea, productionGroup, startTime, and quantityKwh and wrote the data into the Cassandra database.</p>
-<h3 id="MongoDB">MongoDB<a class="anchor-link" href="#MongoDB">¶</a></h3><p>I established a connection to MongoDB Atlas and wrote the Spark DataFrame into a collection. This step went more smoothly than the previous parts of the project.</p>
-<h3 id="Streamlit-APP">Streamlit APP<a class="anchor-link" href="#Streamlit-APP">¶</a></h3><p>The Streamlit app was built to visualize the results. I reused parts of the code from the Jupyter Notebook but added interactivity.</p>
-<h3 id="AI-Usage">AI-Usage<a class="anchor-link" href="#AI-Usage">¶</a></h3><p>I have used ChatGPT widely throughout the project. It helped me find the correct structure of the Elhub API response, troubleshoot Spark connection problems, and solve smaller issues with plotting, database connections, and the Streamlit layout.</p>
+<h4 id="MongoDB">MongoDB<a class="anchor-link" href="#MongoDB">¶</a></h4><p>I established a connection to MongoDB Atlas and wrote the Spark DataFrame into a collection. This step went more smoothly than the previous parts of the project.</p>
+<h4 id="Streamlit-APP">Streamlit APP<a class="anchor-link" href="#Streamlit-APP">¶</a></h4><p>The Streamlit app was built to visualize the results. I reused parts of the code from the Jupyter Notebook but added interactivity. Just like in the first part of the project work, I find Streamlit somewhat cumbersome to work with.(everytime I think I get the hang of it, I'm wrong) Added secrets in the streamlit cloud and deplyed the app.</p>
+<h4 id="AI-Usage">AI-Usage<a class="anchor-link" href="#AI-Usage">¶</a></h4><p>I have used ChatGPT widely throughout the project. It helped me find the correct structure of the Elhub API response, troubleshoot Spark connection problems, and solve smaller issues with plotting, database connections, and the Streamlit layout.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=4f5e6e2c">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="API-Request-and-EDA">API Request and EDA<a class="anchor-link" href="#API-Request-and-EDA">¶</a></h2><p>Importing libraries and connected to Elhub API</p>
 </div>
 </div>
 </div>
@@ -7537,7 +7548,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># importing necessary libraries </span>
@@ -7567,7 +7578,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># connecting to elhub, fetching energy data and converting to pandas dataframe </span>
@@ -7660,7 +7671,7 @@ Hentet 215353 rader totalt.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># finding data in the  middle of the df to observe how summertime is encoded </span>
@@ -7691,7 +7702,7 @@ Winter time:  2021-01-01T00:00:00+01:00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># copy of the raw data </span>
@@ -7704,12 +7715,26 @@ Winter time:  2021-01-01T00:00:00+01:00
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cb979257">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h4 id="Overview-of-the-data">Overview of the data<a class="anchor-link" href="#Overview-of-the-data">¶</a></h4><ul>
+<li>df.head() – returns the first five rows of the dataset, including column names</li>
+<li>df.info() – shows missing values, data types, and total number of entries. We 215 353 entries and no missing dat. startTime is of datatype datetime, area and productionGroup are objects and quantityKwh is float.</li>
+</ul>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=c942e118">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -7746,7 +7771,7 @@ memory usage: 6.6+ MB
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -7760,7 +7785,7 @@ memory usage: 6.6+ MB
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[31]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
 <div>
 <style scoped="">
@@ -7847,7 +7872,7 @@ To address this, a second bar plot with a logarithmic scale was created.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [32]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Summary of production per production group and price area</span>
@@ -7904,7 +7929,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [33]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Bar plot for each production type in each price area</span>
@@ -7945,7 +7970,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [34]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Bar plot with logaritmic y-axis </span>
@@ -7989,7 +8014,7 @@ NO5              1.874000e+00
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="SPARK">SPARK<a class="anchor-link" href="#SPARK">¶</a></h2><p>Importing the necessary libraries and extensions, created a Spark session and a Cassandra session. Created a keyspace, "elhub" and table "production_hourly" in Cassandra.</p>
+<h2 id="Spark-and-Cassandra">Spark and Cassandra<a class="anchor-link" href="#Spark-and-Cassandra">¶</a></h2><p>Importing the necessary libraries and extensions, created a Spark session and a Cassandra session. Created a keyspace, "elhub" and table "production_hourly" in Cassandra.</p>
 </div>
 </div>
 </div>
@@ -7998,7 +8023,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [35]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># importing necessary pacages and environmental variables </span>
@@ -8028,7 +8053,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [36]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># starting spark session </span>
@@ -8065,7 +8090,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [37]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># starting Cassandra-session </span>
@@ -8082,7 +8107,7 @@ NO5              1.874000e+00
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [38]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># creating keyspace and table in Cassandra </span>
@@ -8111,9 +8136,9 @@ NO5              1.874000e+00
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[38]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>&lt;cassandra.cluster.ResultSet at 0x2dbb90565d0&gt;</pre>
+<pre>&lt;cassandra.cluster.ResultSet at 0x233b5d70c90&gt;</pre>
 </div>
 </div>
 </div>
@@ -8136,7 +8161,7 @@ Used Spark to extract the columns area, productiongroup, starttime, and quantity
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [39]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Creating Spark dataframe </span>
@@ -8195,7 +8220,7 @@ only showing top 5 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [40]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Writing to cassandra </span>
@@ -8230,7 +8255,7 @@ only showing top 5 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Read all data from Cassandra</span>
@@ -8261,7 +8286,6 @@ only showing top 5 rows
  |-- productiongroup: string (nullable = true)
  |-- quantitykwh: double (nullable = true)
 
---------------------------
 +----+-------------------+---------------+-----------+
 |area|starttime          |productiongroup|quantitykwh|
 +----+-------------------+---------------+-----------+
@@ -8299,7 +8323,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [42]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql</span><span class="w"> </span><span class="kn">import</span> <span class="n">functions</span> <span class="k">as</span> <span class="n">F</span>
@@ -8361,7 +8385,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [43]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyspark.sql.functions</span><span class="w"> </span><span class="kn">import</span> <span class="n">month</span>
@@ -8430,7 +8454,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [44]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pymongo.mongo_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">MongoClient</span>
@@ -8482,7 +8506,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [45]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [24]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># creating database and collection</span>
@@ -8498,7 +8522,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [46]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [25]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># writing data to mangoDB</span>
@@ -8533,7 +8557,7 @@ only showing top 10 rows
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [47]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [26]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Reading data from MongoDB to a pandas df</span>
