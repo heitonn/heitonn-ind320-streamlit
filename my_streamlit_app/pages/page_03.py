@@ -10,13 +10,15 @@ st.header("Visualizing energy data" )
 # Dividing page in two columns
 
 col1, col2 = st.columns(2, gap="large")
-# Reading username, password and cluster from secrets.toml
+
+# Hent secrets fra Streamlit Cloud
 usr = st.secrets["mongo"]["username"]
 pwd = st.secrets["mongo"]["password"]
 cluster = st.secrets["mongo"]["cluster"]
 
-# Setting up MongoDB URI
+# Sett opp URI
 uri = f"mongodb+srv://{usr}:{pwd}@{cluster}.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+client = MongoClient(uri)
 
 # Cache data 
 @st.cache_data
