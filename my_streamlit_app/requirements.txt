@@ -2,5 +2,11 @@ streamlit
 pandas
 matplotlib
 seaborn
+numpy
+scipy
+statsmodels
 pymongo
 pyspark
+openmeteo_requests
+requests_cache
+retry_requests
