@@ -2,6 +2,7 @@ import pandas as pd
 from pymongo.mongo_client import MongoClient
 import streamlit as st
 
+# loading energy data from mongoDB
 def load_energy_data():
     # Mongo connection
     usr = st.secrets["mongo"]["username"]

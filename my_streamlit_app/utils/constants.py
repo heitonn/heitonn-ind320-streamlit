@@ -1,4 +1,6 @@
 import pandas as pd
+
+# dataframe with city, price area and coordinates
 data = [
     ['NO1', 'Oslo', 10.7522, 59.9139],
     ['NO2', 'Kristiansand', 8.0000, 58.1467],
