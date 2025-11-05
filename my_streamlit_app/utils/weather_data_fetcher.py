@@ -3,6 +3,8 @@ import requests_cache
 from retry_requests import retry
 import pandas as pd
 
+# function for retrieving data from open meteo API 
+# based on open meteo API python code
 def get_weather_data(latitude, longitude, year=2021):
     cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
     retry_session = retry(cache_session, retries=3, backoff_factor=0.3)

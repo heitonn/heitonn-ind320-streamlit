@@ -1,43 +1,38 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
+
+# imports from utils
 from utils.constants import city_data_df
-from utils.data_fetcher import get_weather_data
+from utils.weather_data_fetcher import get_weather_data
+from utils.ui_helpers import choose_price_area
 
-
+# page title and header
 st.set_page_config(page_title="Weather visualizer", layout="wide")
 st.header("Visualizing weather data")
 st.write("Select a column and a month range to visualize the data. Use 'All columns' to see everything.")
 
-# Reading data 
-chosen_area = st.session_state.get("chosen_area", "NO5")
-row = city_data_df[city_data_df["PriceArea"] == chosen_area].iloc[0]
-df = get_weather_data(row["Latitude"], row["Longitude"], year=2021)
+# Reading data  
+chosen_area, row = choose_price_area() # function in utils/ui_helpers.py
 
-# --- AREA SELECTION ---
-# Hent valgt område fra session_state eller default til NO5
-chosen_area = st.session_state.get("chosen_area", "NO5")
-areas = [f"NO{i}" for i in range(1, 6)]
+# Fetch weather data
+df = get_weather_data(row["Latitude"], row["Longitude"], year=2021) #  function in utils/weather_data_fetcher.py
 
-# Lag labels som viser både NOx og bynavn
-labels = [f"{area} – {city_data_df[city_data_df['PriceArea'] == area]['City'].values[0]}" for area in areas]
+# Mapping column names to more user-friendly labels
+column_names = {"temperature_2m": "Temperature (°C)",
+                "precipitation": "Precipitation (mm)",
+                "wind_speed_10m": "Wind Speed (m/s)",  
+                "wind_gusts_10m": "Wind Gusts (m/s)",  
+                "wind_direction_10m": "Wind Direction (°)"}
+df.columns = [column_names.get(col, col) for col in df.columns]
 
-# Radio for å velge område
-selected_label = st.radio("Select price area:", labels, index=areas.index(chosen_area), horizontal=True)
-
-# Oppdater session_state
-chosen_area = selected_label.split(" – ")[0]  # bare NOx
-st.session_state["chosen_area"] = chosen_area
-
-# Vis valgt område
-st.write(f"**Currently selected area:** {selected_label}")
-# Choosing column (or all columns)
+# Creating dropdown for column selection
 options = list(df.columns) + ["All columns"]
 selected_col = st.selectbox("Select column(s) to plot:", options)
 
-# Sorting data per month 
+# Sorting data per month
 months = sorted(df.index.to_period("M").unique().strftime("%Y-%m"))
+
 # Selecting month slider
 selected_months = st.select_slider(
     "Select months range:",
@@ -59,7 +54,7 @@ else:
 
 ax.set_title("Weather data")
 ax.set_xlabel("Time")
-ax.set_ylabel("Value")
+ax.set_ylabel(f"{selected_col}")  # Use y_labels for y-axis
 ax.legend(loc="best")
 
 st.pyplot(fig)

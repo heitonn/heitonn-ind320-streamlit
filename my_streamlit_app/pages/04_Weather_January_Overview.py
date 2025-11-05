@@ -1,32 +1,17 @@
 import streamlit as st
 import pandas as pd
 from utils.constants import city_data_df
-from utils.data_fetcher import get_weather_data
+from utils.weather_data_fetcher import get_weather_data
+from utils.ui_helpers import choose_price_area
 
 st.set_page_config(page_title="January Weather", layout="wide")
 st.header("Weatherdata January 2021 Overview")
 
-# --- AREA SELECTION ---
-available_areas = city_data_df["PriceArea"].tolist()
-labels = [
-    f"{area} – {city_data_df[city_data_df['PriceArea'] == area]['City'].values[0]}"
-    for area in available_areas
-]
-label_to_area = {label: area for label, area in zip(labels, available_areas)}
 
-# default
-chosen_area = st.session_state.get("chosen_area", available_areas[0])
-default_label = next((lbl for lbl, area in label_to_area.items() if area == chosen_area), labels[0])
-
-# horisontale radioknapper
-selected_label = st.radio(
-    "Select price area:",
-    labels,
-    index=labels.index(default_label),
-    horizontal=True
-)
-chosen_area = label_to_area[selected_label]
-st.session_state["chosen_area"] = chosen_area
+# area selection
+# radio buttens with area (price and city)
+chosen_area, row = choose_price_area()
+chosen_area = st.session_state.get("chosen_area")
 
 # hent data (try/except for sikkerhet)
 filtered_rows = city_data_df[city_data_df["PriceArea"] == chosen_area]

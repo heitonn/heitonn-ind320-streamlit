@@ -2,50 +2,27 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from pymongo.mongo_client import MongoClient
-from utils.ui_helpers import choose_price_area
 
+# imports from utils
+from utils.ui_helpers import choose_price_area
+from utils.load_energy_data import load_energy_data
 
 # Title and wide layout
 st.set_page_config(page_title="Energy Dashboard", layout="wide")
 st.header("Visualizing energy data" )
 
+# loading energy data from mongoDB
+df = load_energy_data() # function in utils/load_energy_data.py
+
+# Area selection
+chosen_area, row = choose_price_area() # function in utils/ui_helpers.py
+
 # Dividing page in two columns
-
 col1, col2 = st.columns(2, gap="large")
-
-# Hent secrets fra Streamlit Cloud
-usr = st.secrets["mongo"]["username"]
-pwd = st.secrets["mongo"]["password"]
-cluster = st.secrets["mongo"]["cluster"]
-
-# Sett opp URI
-uri = f"mongodb+srv://{usr}:{pwd}@{cluster}.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-# Cache data 
-@st.cache_data
-def load_data():
-    client = MongoClient(uri)
-    db = client["energy_database"]
-    collection = db["energy_collection"]
-    data = list(collection.find())
-    client.close() # closing Mongo connection 
-
-    df = pd.DataFrame(data)
-    df['starttime'] = pd.to_datetime(df['starttime'])
-    if '_id' in df.columns:
-        df = df.drop(columns=['_id'])
-    df['month'] = df['starttime'].dt.month_name()
-    return df
-
-df = load_data()
-
 
 # Column 1: pie chart
 with col1:
     st.subheader("Total Production per Group")
-
-    # Choosing area 
-    chosen_area, row = choose_price_area()
 
     # Filtering and summarizing per production type
     df_area = df[df['area'] == chosen_area]
