@@ -9,18 +9,14 @@ def load_energy_data():
     uri = f"mongodb+srv://{usr}:{pwd}@{cluster}.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
     @st.cache_data
-    def _load():
+    def _load(dummy=None):
         client = MongoClient(uri)
         db = client["energy_database"]
-
-        # Load both collections
-        prod = pd.DataFrame(list(db["production_collection"].find()))
-        cons = pd.DataFrame(list(db["consumption_collection"].find()))
+        collection = db["production_collection"]   # UPDATED
+        data = list(collection.find())
 
         client.close()
-
-        # Combine
-        df = pd.concat([prod, cons], ignore_index=True)
+        df = pd.DataFrame(data)
 
         # Clean
         if "_id" in df.columns:
@@ -36,4 +32,4 @@ def load_energy_data():
 
         return df
 
-    return _load()
+    return _load(dummy = 1) # FORCE CACHE RESET
