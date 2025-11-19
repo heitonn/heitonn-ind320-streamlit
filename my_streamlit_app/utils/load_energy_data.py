@@ -2,9 +2,7 @@ import pandas as pd
 from pymongo.mongo_client import MongoClient
 import streamlit as st
 
-# loading energy data from mongoDB
 def load_energy_data():
-    # Mongo connection
     usr = st.secrets["mongo"]["username"]
     pwd = st.secrets["mongo"]["password"]
     cluster = st.secrets["mongo"]["cluster"]
@@ -14,14 +12,28 @@ def load_energy_data():
     def _load():
         client = MongoClient(uri)
         db = client["energy_database"]
-        collection = db["energy_collection"]
-        data = list(collection.find())
+
+        # Load both collections
+        prod = pd.DataFrame(list(db["production_collection"].find()))
+        cons = pd.DataFrame(list(db["consumption_collection"].find()))
+
         client.close()
-        df = pd.DataFrame(data)
-        df['starttime'] = pd.to_datetime(df['starttime'])
-        if '_id' in df.columns:
-            df = df.drop(columns=['_id'])
-        df['month'] = df['starttime'].dt.month_name()
+
+        # Combine
+        df = pd.concat([prod, cons], ignore_index=True)
+
+        # Clean
+        if "_id" in df.columns:
+            df.drop(columns=["_id"], inplace=True)
+
+        # Ensure starttime exists
+        if "starttime" in df.columns:
+            df["starttime"] = pd.to_datetime(df["starttime"])
+        else:
+            raise KeyError(f"Mangler 'starttime'. Kolonner er: {df.columns.tolist()}")
+
+        df["month"] = df["starttime"].dt.month_name()
+
         return df
 
     return _load()
