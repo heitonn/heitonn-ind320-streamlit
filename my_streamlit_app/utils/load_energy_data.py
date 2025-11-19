@@ -2,7 +2,7 @@ import pandas as pd
 from pymongo.mongo_client import MongoClient
 import streamlit as st
 
-def load_energy_data():
+def load_energy_data_v2():
     usr = st.secrets["mongo"]["username"]
     pwd = st.secrets["mongo"]["password"]
     cluster = st.secrets["mongo"]["cluster"]
