@@ -14,7 +14,7 @@ def load_energy_data():
     def _load():
         client = MongoClient(uri)
         db = client["energy_database"]
-        collection = db["energy_collection"]
+        collection = db["production_collection"]
         data = list(collection.find())
         client.close()
         df = pd.DataFrame(data)
