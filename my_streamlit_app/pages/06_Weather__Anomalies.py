@@ -44,7 +44,7 @@ with tab1:
     temps = df["temperature_2m"].to_numpy()
     dates = pd.to_datetime(df["date"])
     temps_dct = dct(temps, norm='ortho')
-    temps_dct[:cutoff] = 50  # High-pass filter default cutoff=50
+    temps_dct[:cutoff] = 0  # High-pass filter - set low frequencies to 0 (not 50)
     temps_satv = idct(temps_dct, norm='ortho')
     
     # Robust statistics with MAD (on seasonally adjusted)
@@ -52,7 +52,14 @@ with tab1:
     mad_satv = np.median(np.abs(temps_satv - median_satv))
     upper_limit_satv = median_satv + n_std * mad_satv
     lower_limit_satv = median_satv - n_std * mad_satv
-    outliers = (temps_satv > upper_limit_satv) | (temps_satv < lower_limit_satv)
+    
+    # Trim edge effects (first and last 0.25% of data)
+    edge_trim = int(len(temps_satv) * 0.0025)
+    temps_satv_trimmed = temps_satv.copy()
+    temps_satv_trimmed[:edge_trim] = np.nan
+    temps_satv_trimmed[-edge_trim:] = np.nan
+    
+    outliers = (temps_satv_trimmed > upper_limit_satv) | (temps_satv_trimmed < lower_limit_satv)
     
     # Calculate boundaries relative to original temperature
     # The boundaries follow the seasonal pattern (inverse of high-pass)
