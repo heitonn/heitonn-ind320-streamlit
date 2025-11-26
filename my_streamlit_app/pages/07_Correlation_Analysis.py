@@ -11,8 +11,10 @@ from utils.load_energy_data import load_energy_data_v2, load_consumption_data
 from utils.weather_data_fetcher import get_weather_data
 from utils.constants import city_data_df
 
-st.set_page_config(page_title="Weather-Energy Correlation", layout="wide")
-st.title("⚡🌤️ Weather-Energy Sliding Window Correlation")
+st.set_page_config(page_title="Correlation Analysis", layout="wide", page_icon="🔗")
+st.title("🔗 Weather-Energy Correlation Analysis")
+st.markdown("Discover relationships between weather variables and energy production/consumption using sliding window correlation.")
+st.info("💡 Tip: Try different lag values to see if weather changes predict energy changes (or vice versa).")
 
 st.markdown("""
 This page shows the **sliding window correlation** between weather variables and energy production/consumption.
@@ -46,7 +48,13 @@ energy_types = {
     "Wind Production": ("production", "wind"),
     "Solar Production": ("production", "solar"),
     "Hydro Production": ("production", "hydro"),
-    "Total Consumption": ("consumption", "All")
+    "Thermal Production": ("production", "thermal"),
+    "Total Consumption": ("consumption", "All"),
+    "Household Consumption": ("consumption", "household"),
+    "Cabin Consumption": ("consumption", "cabin"),
+    "Primary Sector Consumption": ("consumption", "primary_sector"),
+    "Secondary Sector Consumption": ("consumption", "secondary_sector"),
+    "Tertiary Sector Consumption": ("consumption", "tertiary_sector")
 }
 
 # Variable selectors
@@ -180,35 +188,41 @@ st.subheader(f"Sliding Window Correlation: {weather_var_label} vs {energy_var_la
 # Create subplot figure
 fig = go.Figure()
 
-# Normalize series for visualization (z-score)
+# Normalize series for visualization
 weather_norm = (weather_series - weather_series.mean()) / weather_series.std()
 energy_norm = (energy_series - energy_series.mean()) / energy_series.std()
 
-# Plot 1: Weather variable
+# Creating one plot with dual y-axes for weather, energy, and correlation
+# Chosen weather variable
 fig.add_trace(go.Scatter(
     x=weather_norm.index,
     y=weather_norm.values,
     name=weather_var_label,
     line=dict(color='blue', width=1),
-    yaxis='y1'
+    yaxis='y1',
+    customdata=weather_series.values,
+    hovertemplate='%{x}<br>' + weather_var_label + ': %{customdata:.2f}<extra></extra>'
 ))
 
-# Plot 2: Energy variable
+# Chosen energy variable
 fig.add_trace(go.Scatter(
     x=energy_norm.index,
     y=energy_norm.values,
     name=energy_var_label,
     line=dict(color='green', width=1),
-    yaxis='y1'
+    yaxis='y1',
+    customdata=energy_series.values,
+    hovertemplate='%{x}<br>' + energy_var_label + ': %{customdata:.2f} kWh<extra></extra>'
 ))
 
-# Plot 3: Correlation
+# Correlation between energy and weather variables
 fig.add_trace(go.Scatter(
     x=correlation.index,
     y=correlation.values,
     name='Correlation',
     line=dict(color='red', width=2),
-    yaxis='y2'
+    yaxis='y2',
+    hovertemplate='%{x}<br>Correlation: %{y:.2f}<extra></extra>'
 ))
 
 # Add zero line for correlation
@@ -270,7 +284,7 @@ with col2:
 # Interpretation help
 st.markdown("---")
 st.markdown("""
-### 📊 Interpretation Guide
+### Interpretation Guide
 
 - **Positive correlation**: When weather variable increases, energy variable tends to increase
 - **Negative correlation**: When weather variable increases, energy variable tends to decrease

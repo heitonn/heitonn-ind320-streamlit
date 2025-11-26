@@ -10,12 +10,24 @@ from utils.snowdrift_calculations import (
 )
 
 # Page config
-st.set_page_config(page_title="Snow Drift Analysis", layout="wide")
-st.header("❄️ Snow Drift Analysis")
+st.set_page_config(page_title="Snow Drift Analysis", layout="wide", page_icon="❄️")
+st.title("❄️ Snow Drift Analysis")
+st.markdown("Calculate and visualize snow drift patterns using wind data based on the Tabler (2003) method.")
+
+# Gracefully deciling to calculate snow drift only if a price area has been selected on the map
+if "chosen_area" not in st.session_state or st.session_state.chosen_area is None:
+    st.warning("""
+    ### ⚠️ No price area selected
+    
+    Please go to the **Interactive Map** page and select a price area by clicking one of the city buttons.
+    
+    Then come back to this page to analyze snow drift at that location.
+    """)
+    st.stop()
 
 st.markdown("""
-**Snow drift** is the amount of snow transported by wind. This analysis calculates how much snow 
-is blown around at your location, which is important for:
+            **Qt (Snow Transport)** or ** Snow drift**is the amount of snow blown by wind, measured in **tonnes per meter** (tonnes/m).
+This analysis calculates how much snow is blown around a given location, which is important for:
 - Planning snow fences to protect roads and buildings
 - Understanding where snow accumulates
 - Designing structures in snowy areas
@@ -23,16 +35,7 @@ is blown around at your location, which is important for:
 
 st.divider()
 
-# Check if a price area has been selected
-if "chosen_area" not in st.session_state or st.session_state.chosen_area is None:
-    st.warning("""
-    ### ⚠️ No price area selected
-    
-    Please go to the **Energy Map** page and select a price area by clicking one of the city buttons.
-    
-    Then come back to this page to analyze snow drift at that location.
-    """)
-    st.stop()
+
 
 # Get coordinates for the selected price area
 chosen_area = st.session_state.chosen_area
@@ -45,7 +48,7 @@ st.success(f"📍 Analyzing snow drift for **{chosen_area} - {city}** ({lat:.2f}
 
 st.divider()
 
-# ============ PARAMETERS ============
+# Parameter selection
 st.subheader("Parameters")
 
 col1, col2 = st.columns(2)
@@ -109,12 +112,12 @@ with col2:
 
 st.divider()
 
-# ============ DATA LOADING ============
+# Data loading
 @st.cache_data(show_spinner=True)
 def load_multi_year_weather_data(latitude, longitude, start_year, end_year):
     """
-    Load weather data for multiple years using the existing get_weather_data function.
-    The cache ensures we don't make redundant API calls.
+    Load weather data for multiple years using the  get_weather_data from utils/weather_data_fetcher.py.
+    The caches the data to ensure we don't make redundant API calls.
     """
     years = list(range(start_year, end_year + 1))
     df = get_weather_data(latitude, longitude, year=years)
@@ -140,16 +143,16 @@ with st.spinner(f"Loading weather data for {year_start}-{year_end}..."):
         **Note about Open-Meteo API limits:**
         - The free tier allows 10,000 API calls per day
         - Streamlit caches the data, so you won't make new API calls unless:
-          - You clear the cache
-          - You restart the app
-          - The cache expires (default: 1 hour)
+        - You clear the cache
+        - You restart the app
+        - The cache expires (default: 1 hour)
         - Each year requires 1 API call
         """)
         st.stop()
 
 st.divider()
 
-# ============ CALCULATIONS ============
+# Calculations
 with st.spinner("Calculating snow drift..."):
     yearly_results = compute_yearly_results(df, T, F, theta)
     avg_sectors = compute_average_sector(df)
@@ -158,38 +161,17 @@ if yearly_results.empty:
     st.error("No complete seasons found in the selected year range.")
     st.stop()
 
-# ============ RESULTS DISPLAY ============
+# Results display
 st.subheader("📊 Snow Drift Results")
 
-st.markdown("""
-**Qt (Snow Transport)** is the amount of snow blown by wind, measured in **tonnes per meter** (tonnes/m).
-- Higher values = more snow gets transported by wind
-- This tells you how much snow drift to expect each winter season
-""")
+
 
 # Overall statistics
 overall_avg_kg = yearly_results['Qt (kg/m)'].mean()
 overall_avg_tonnes = overall_avg_kg / 1000
 
-col_stat1, col_stat2, col_stat3 = st.columns(3)
-with col_stat1:
-    st.metric(
-        "Average Snow Drift",
-        f"{overall_avg_tonnes:.1f} tonnes/m",
-        help="Average amount of snow transported per winter season"
-    )
-with col_stat2:
-    max_qt = yearly_results['Qt (kg/m)'].max() / 1000
-    max_season = yearly_results.loc[yearly_results['Qt (kg/m)'].idxmax(), 'season']
-    st.metric("Highest Winter", f"{max_qt:.1f} tonnes/m", delta=f"{max_season}")
-with col_stat3:
-    min_qt = yearly_results['Qt (kg/m)'].min() / 1000
-    min_season = yearly_results.loc[yearly_results['Qt (kg/m)'].idxmin(), 'season']
-    st.metric("Lowest Winter", f"{min_qt:.1f} tonnes/m", delta=f"{min_season}")
 
-st.divider()
-
-# ============ YEARLY PLOT ============
+# Yearly plot
 st.subheader("📈 Snow Drift by Winter Season")
 st.caption("Each bar shows how much snow was transported during that winter (July to June)")
 
@@ -226,32 +208,8 @@ fig_yearly.update_layout(
 
 st.plotly_chart(fig_yearly, use_container_width=True)
 
-# Show control type for each season
-with st.expander("📋 What limits the snow drift?"):
-    st.markdown("""
-    Snow drift can be limited by two factors:
-    - **Wind controlled**: There's plenty of snow, but not enough wind to blow it around
-    - **Snowfall controlled**: There's plenty of wind, but not enough snow to transport
-    """)
-    display_df = yearly_results[['season', 'Qt (tonnes/m)', 'Control']].copy()
-    st.dataframe(
-        display_df,
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "season": "Season",
-            "Qt (tonnes/m)": st.column_config.NumberColumn(
-                "Qt (tonnes/m)",
-                format="%.1f"
-            ),
-            "Control": "Limiting Factor"
-        }
-    )
-
-st.divider()
-
-# ============ WIND ROSE ============
-st.subheader("🌹 Which Direction Does the Snow Come From?")
+# Wind Rose
+st.subheader("Which Direction Does the Snow Come From?")
 
 st.markdown("""
 The **wind rose** shows which wind directions transport the most snow:
@@ -301,36 +259,3 @@ fig_rose.update_layout(
 )
 
 st.plotly_chart(fig_rose, use_container_width=True)
-
-# ============ INFO SECTION ============
-st.divider()
-
-with st.expander("ℹ️ How Are These Calculations Done?"):
-    st.markdown("""
-    ### Tabler (2003) Snow Drift Method
-    
-    This analysis calculates snow drift using the scientifically validated Tabler (2003) method.
-    
-    **What is Qt (Snow Transport)?**
-    - Qt = the amount of snow blown by wind, measured in tonnes per meter (tonnes/m)
-    - It combines wind speed and snowfall amount
-    - Higher Qt = more snow drift problems
-    
-    **Winter Season Definition:**
-    - Season runs from **July 1 to June 30** (not calendar year)
-    - Example: "2021-2022" means July 1, 2021 to June 30, 2022
-    - This captures the complete winter period
-    
-    **What Controls Snow Drift?**
-    1. **Wind controlled**: Lots of snow available, but wind isn't strong enough to move it all
-    2. **Snowfall controlled**: Strong winds, but not enough snow to transport
-    
-    **Data Source:**
-    - Hourly weather data from Open-Meteo Archive API
-    - Includes: temperature, precipitation, wind speed, wind direction
-    - Snow is counted when temperature < 1°C
-    
-    **API Usage Note:**
-    - Data is cached for 1 hour to minimize API calls
-    - Free tier allows 10,000 calls/day (each year = 1 call)
-    """)

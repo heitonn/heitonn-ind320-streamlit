@@ -13,8 +13,10 @@ from utils.load_energy_data import load_energy_data_v2
 from utils.ui_helpers import choose_price_area
 
 # page title and header
-st.set_page_config(page_title="Energy Decomposition", layout="wide")
-st.header("Energy Data Decomposition and Spectrogram")
+st.set_page_config(page_title="Energy Decomposition", layout="wide", page_icon="📈")
+st.title("📈 Energy Decomposition")
+st.markdown("Analyze energy trends, seasonality, and patterns using STL decomposition and spectrograms.")
+st.info("💡 Tip: Select your region on the Interactive Map page first, then choose a production group to analyze.")
 
 # load energy data from utils/load_energy_data.py
 df = load_energy_data_v2()
@@ -30,7 +32,7 @@ selected_group = st.selectbox("Select production group:", all_groups)
 tab1, tab2 = st.tabs(["STL Decomposition", "Spectrogram"])
 
 with tab1:
-    st.subheader(f"STL Decomposition for {selected_group} in {chosen_area}")  # <-- bruk chosen_area
+    st.subheader(f"STL Decomposition for {selected_group} in {chosen_area}")  
     
     # Filter data
     df_filtered = df[(df['area'] == chosen_area) & (df['productiongroup'] == selected_group)].copy()
@@ -83,10 +85,11 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
-    st.subheader(f"Spectrogram for {selected_group} in {chosen_area}")  # <-- bruk chosen_area
+    st.subheader(f"Spectrogram for {selected_group} in {chosen_area}")
     
-    # Filter data and create time series
-    ts = df_filtered.set_index('starttime')['quantitykwh'].values
+    # Filter data and create time series with timestamps
+    ts_series = df_filtered.set_index('starttime')['quantitykwh']
+    ts = ts_series.values
     
     # Check if time series is long enough and compute spectrogram
     if len(ts) < 24:
@@ -108,7 +111,14 @@ with tab2:
             title=f"Spectrogram of {selected_group} in {chosen_area}",
             xaxis_title="Time (hours)",
             yaxis_title="Frequency (1/hour)",
+            xaxis2=dict(
+                title="Date",
+                overlaying='x',
+                side='top',
+                tickmode='array',
+                showgrid=False
+            ),
             height=500,
-            margin=dict(l=40, r=40, t=60, b=40)
+            margin=dict(l=40, r=40, t=80, b=40)
         )
         st.plotly_chart(fig, use_container_width=True)

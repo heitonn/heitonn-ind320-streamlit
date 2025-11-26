@@ -10,8 +10,9 @@ from utils.constants import city_data_df
 from utils.load_energy_data import load_energy_data_v2, load_consumption_data
 
 # Page config
-st.set_page_config(page_title="Price Area Map", layout="wide")
-st.header("Energy Consumption and Production")
+st.set_page_config(page_title="Interactive Map", layout="wide", page_icon="🗺️")
+st.title("🗺️ Interactive Energy Map")
+st.markdown("Explore energy production and consumption across Norwegian price areas. Click on cities to select a region for detailed analysis.")
 
 # Load GeoJSON file for Norwegian price areas
 @st.cache_data
@@ -44,7 +45,7 @@ if "chosen_area" not in st.session_state:
 # Get current chosen area from session state
 chosen_area = st.session_state.get("chosen_area", "NO1")
 
-# ============ MAP SETTINGS (COMPACT) ============
+# Settings for data type, group, days
 col_settings1, col_settings2, col_settings3 = st.columns([2, 2, 1])
 
 with col_settings1:
@@ -95,7 +96,7 @@ with col_settings2:
 with col_settings3:
     days = st.slider(
         "Days:", 
-        1, 30, 7, 
+        1, 7, 30,
         key="days",
         label_visibility="collapsed",
         help="Time interval in days"
@@ -122,31 +123,35 @@ area_stats = df_filtered.groupby('area')['quantitykwh'].agg(['mean', 'sum', 'max
 area_stats.columns = ['area', 'mean_kwh', 'total_kwh', 'peak_kwh']
 area_means = area_stats.set_index('area')['mean_kwh'].to_dict()
 
-# ============ CITY SELECTION BUTTONS (COMPACT) ============
+# Price area selection
 available_areas = ["NO1", "NO2", "NO3", "NO4", "NO5"]
 
 cols = st.columns(5)
 for idx, area in enumerate(available_areas):
     with cols[idx]:
-        # Get city name for this area
+        # Get city name for this area from city_data_df in utils/constants.py
         city_name = city_data_df[city_data_df['PriceArea'] == area]['City'].values[0]
         area_value = area_means.get(area, 0)
         
-        # Compact button label with city name - show actual value
-        if area_value == 0:
+        # display value energy data 
+        if area_value == 0: # no data for area
             value_display = "0 kWh"
         elif area_value < 1000:
-            value_display = f"{area_value:.0f} kWh"
+            value_display = f"{area_value:.0f} kWh" # show actual value
         else:
-            value_display = f"{area_value/1000:.1f}k kWh"
+            value_display = f"{area_value/1000:.1f}k kWh" # show in 'k kWh' format
         
+        # display button with selected area highlighted
+        #selected area bolded
         if area == chosen_area:
-            button_label = f"**{city_name}**\n{value_display}"
+            button_label = f"**{city_name}**\n{value_display}" # displays selected area 
             button_type = "primary"
+        # not selected area no bolded
         else:
             button_label = f"{city_name}\n{value_display}"
             button_type = "secondary"
         
+        # display button
         if st.button(
             button_label, 
             key=f"btn_{area}",
@@ -160,7 +165,7 @@ for idx, area in enumerate(available_areas):
 
 st.divider()
 
-# ============ MAIN LAYOUT: MAP (LEFT) + INFO (RIGHT) ============
+# MAIN LAYOUT: MAP (LEFT) + INFO (RIGHT) 
 if geojson_data:
     col_map, col_info = st.columns([2, 1])
 
@@ -181,6 +186,7 @@ if geojson_data:
             locations='area_display',
             featureidkey="properties.ElSpotOmr",
             color='mean_kwh',
+            # colorscale to illustrate energy levels
             color_continuous_scale=[
                 [0, "rgb(200, 200, 255)"],    # Very light blue for low/zero
                 [0.5, "rgb(150, 100, 200)"],  # Purple for medium
@@ -264,7 +270,7 @@ if geojson_data:
         # Display the map
         st.plotly_chart(fig, use_container_width=True, key="price_area_map")
 
-    # ============ RIGHT SIDE: INFORMATION PANEL ============
+    # RIGHT SIDE: INFORMATION PANEL 
     with col_info:
         # Show selected area and city
         city_info = city_data_df[city_data_df['PriceArea'] == chosen_area].iloc[0]
@@ -313,7 +319,7 @@ if geojson_data:
         - **Blue markers** = Other cities
         """)
 
-    # ============ BOTTOM: ADDITIONAL INFO (IF NEEDED) ============
+    # BOTTOM: ADDITIONAL INFO (IF NEEDED) 
     with st.expander("ℹAbout This Page"):
         st.markdown("""
         This interactive map shows Norwegian electricity price areas (NO1-NO5) with energy data from 2021-2024.

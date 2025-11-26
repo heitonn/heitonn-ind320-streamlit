@@ -12,21 +12,23 @@ from utils.constants import city_data_df
 from utils.weather_data_fetcher import get_weather_data
 from utils.ui_helpers import choose_price_area
 
-st.set_page_config(page_title="Anomalies and  outliers", layout="wide")
-st.header("Weather Anomalies Detection")
+st.set_page_config(page_title="Weather Anomalies", layout="wide", page_icon="⚠️")
+st.title("⚠️ Weather Anomalies Detection")
+st.markdown("Detect unusual weather patterns using Statistical Process Control (SPC) for temperature and Local Outlier Factor (LOF) for precipitation.")
+st.info("💡 Tip: Adjust the detection parameters to find different types of anomalies.")
 
 chosen_area, row =  choose_price_area()
 
 # Change area here
 chosen_area = st.session_state.get("chosen_area")
 
-# Hent raden trygt
+# Fetch the row 
 row = city_data_df[city_data_df["PriceArea"] == chosen_area].iloc[0]
 
 # Year selection
 year = st.selectbox("Select Year", [2021, 2022, 2023, 2024], index=0)
 
-# Load data ---
+# Load data 
 df = get_weather_data(row["Latitude"], row["Longitude"], year=year)
 df = df.reset_index().rename(columns={"time":"date"})
 
@@ -54,6 +56,7 @@ with tab1:
     lower_limit_satv = median_satv - n_std * mad_satv
     
     # Trim edge effects (first and last 0.25% of data)
+    # Edge effects can distort the detection, so we exclude them
     edge_trim = int(len(temps_satv) * 0.0025)
     temps_satv_trimmed = temps_satv.copy()
     temps_satv_trimmed[:edge_trim] = np.nan

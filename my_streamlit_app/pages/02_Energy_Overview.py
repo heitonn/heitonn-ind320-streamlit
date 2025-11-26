@@ -9,8 +9,10 @@ from utils.ui_helpers import choose_price_area
 from utils.load_energy_data import load_energy_data_v2
 
 # Title and wide layout
-st.set_page_config(page_title="Energy Dashboard", layout="wide")
-st.header("Visualizing energy data" )
+st.set_page_config(page_title="Energy Overview", layout="wide", page_icon="⚡")
+st.title("⚡ Energy Overview")
+st.markdown("Explore energy production and consumption patterns for your selected region.")
+st.info("💡 Tip: Select your region on the Interactive Map page first.")
 
 # loading energy data from mongoDB
 df = load_energy_data_v2() # function in utils/load_energy_data.py
@@ -36,7 +38,7 @@ with col1:
         values='quantitykwh',
         names='productiongroup',
         title=f"Total Production by Group in {chosen_area} (2021)",
-        hole=0.3  # Makes it a donut chart for better readability
+        hole=0.3  # Makes it a donut chart (hole in the middle)for better readability
     )
     fig.update_traces(
         textposition='inside',
