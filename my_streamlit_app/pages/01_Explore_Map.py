@@ -18,7 +18,11 @@ st.markdown("Explore energy production and consumption across Norwegian price ar
 @st.cache_data
 def load_geojson():
     try:
-        with open("file.geojson", "r", encoding="utf-8") as f:
+        # Get path relative to this file's parent directory
+        import os
+        base_dir = os.path.dirname(os.path.dirname(__file__))
+        geojson_path = os.path.join(base_dir, "file.geojson")
+        with open(geojson_path, "r", encoding="utf-8") as f:
             geojson_data = json.load(f)
         return geojson_data
     except Exception as e:
