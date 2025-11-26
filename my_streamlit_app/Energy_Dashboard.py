@@ -27,7 +27,7 @@ with col1:
     Get familiar with the data through interactive charts and regional comparisons.
     """)
     if st.button("📍 Go to Interactive Map", use_container_width=True, type="primary"):
-        st.switch_page("pages/01_Interactive_Map.py")
+        st.switch_page("pages/01_Explore_Map.py")
 
 with col2:
     st.subheader("🔍 Analysis & Patterns")
@@ -41,7 +41,7 @@ with col2:
     Discover patterns and relationships in the data.
     """)
     if st.button("📈 Explore Analysis Tools", use_container_width=True):
-        st.switch_page("pages/04_Energy_Decomposition.py")
+        st.switch_page("pages/04_Analyze_Energy_Decomposition.py")
 
 with col3:
     st.subheader("🔮 Forecasting")
@@ -55,20 +55,6 @@ with col3:
     Predict future energy production and consumption.
     """)
     if st.button("🎯 Create Forecast", use_container_width=True):
-        st.switch_page("pages/08_Energy_Forecast.py")
+        st.switch_page("pages/08_Predict_Energy_Forecast.py")
 
 st.markdown("---")
-
-st.markdown("""
-### 💡 Quick Start Guide
-
-1. **Select a region** on the Interactive Map page
-2. **Explore the data** using the visualization tools
-3. **Analyze patterns** with decomposition and correlation tools
-4. **Create forecasts** using the SARIMAX model
-
-Use the sidebar to navigate between different pages. Your selected region will be remembered across pages.
-""")
-
-st.markdown("---")
-st.caption("Data sources: Elhub API (Energy), Open-Meteo Archive API (Weather) | 2021-2024")

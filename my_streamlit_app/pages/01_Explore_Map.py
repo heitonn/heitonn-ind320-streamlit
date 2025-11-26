@@ -94,6 +94,8 @@ with col_settings2:
             selected_group = "Total"
 
 with col_settings3:
+    # Days slider
+    st.markdown("### Days")
     days = st.slider(
         "Days:", 
         1, 7, 30,
@@ -123,10 +125,16 @@ area_stats = df_filtered.groupby('area')['quantitykwh'].agg(['mean', 'sum', 'max
 area_stats.columns = ['area', 'mean_kwh', 'total_kwh', 'peak_kwh']
 area_means = area_stats.set_index('area')['mean_kwh'].to_dict()
 
-# Price area selection
-available_areas = ["NO1", "NO2", "NO3", "NO4", "NO5"]
+# Price area selection from utils/constants.py
+areas_from_constants = city_data_df['PriceArea'].drop_duplicates().tolist()
 
-cols = st.columns(5)
+# Sort areas numerically (NO1, NO2, ..., NO5)
+def _area_sort_key(a):
+    return int(str(a).replace('NO', '').strip())
+
+available_areas = sorted(areas_from_constants, key=_area_sort_key)
+
+cols = st.columns(len(available_areas))
 for idx, area in enumerate(available_areas):
     with cols[idx]:
         # Get city name for this area from city_data_df in utils/constants.py
@@ -166,6 +174,7 @@ for idx, area in enumerate(available_areas):
 st.divider()
 
 # MAIN LAYOUT: MAP (LEFT) + INFO (RIGHT) 
+# LEFT SIDE: MAP
 if geojson_data:
     col_map, col_info = st.columns([2, 1])
 
@@ -211,36 +220,23 @@ if geojson_data:
             if area_name == chosen_area:
                 geometry = feature.get("geometry", {})
                 geometry_type = geometry.get("type", "")
+                geometry = feature.get("geometry", {})
                 coordinates = geometry.get("coordinates", [])
-                
-                if geometry_type == "Polygon":
-                    for polygon in coordinates:
-                        lons = [coord[0] for coord in polygon]
-                        lats = [coord[1] for coord in polygon]
-                        
-                        fig.add_trace(go.Scattermapbox(
-                            lon=lons,
-                            lat=lats,
-                            mode='lines',
-                            line=dict(width=4, color='black'),
-                            showlegend=False,
-                            hoverinfo='skip'
-                        ))
-                
-                elif geometry_type == "MultiPolygon":
-                    for multi_polygon in coordinates:
-                        for polygon in multi_polygon:
-                            lons = [coord[0] for coord in polygon]
-                            lats = [coord[1] for coord in polygon]
-                            
-                            fig.add_trace(go.Scattermapbox(
-                                lon=lons,
-                                lat=lats,
-                                mode='lines',
-                                line=dict(width=4, color='black'),
-                                showlegend=False,
-                                hoverinfo='skip'
-                            ))
+
+                # Draw border for each polygon ring
+                for polygon in coordinates:
+                    lons = [coord[0] for coord in polygon]
+                    lats = [coord[1] for coord in polygon]
+                    
+                    fig.add_trace(go.Scattermapbox(
+                        # finding longitudes and latitudes for border
+                        lon=lons, 
+                        lat=lats,
+                        mode='lines',
+                        line=dict(width=3, color='black'), #line surrounding selected area
+                        showlegend=False,
+                        hoverinfo='skip'
+                    ))
         
         # Add city markers
         for _, row in city_data_df.iterrows():
@@ -319,22 +315,7 @@ if geojson_data:
         - **Blue markers** = Other cities
         """)
 
-    # BOTTOM: ADDITIONAL INFO (IF NEEDED) 
-    with st.expander("ℹAbout This Page"):
-        st.markdown("""
-        This interactive map shows Norwegian electricity price areas (NO1-NO5) with energy data from 2021-2024.
-        
-        **How to use:**
-        - Click city buttons to switch between areas
-        - Adjust settings to view different data
-        - Selected area syncs across all pages
-        
-        **Note:** The data shown is historical data from the specified date range, not real-time data.
-        
-        **Data source:** Elhub (via MongoDB)
-        """)
-
-else:
+else: # usefull feedback if GeoJSON fails to load
     st.error("⚠️ Could not load GeoJSON file!")
     st.warning("""
     ### GeoJSON file missing
