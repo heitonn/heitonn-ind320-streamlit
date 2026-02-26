@@ -6,10 +6,8 @@ Public repository for project work in IND320.
 ## Structure of the Streamlit App
 ```
 my_streamlit_app/
-    .streamlit/
-        secrets.toml
     Energy_Dashboard.py          # Landing page with navigation
-  assets/file.geojson          # Norwegian price area boundaries
+    assets/file.geojson          # Norwegian price area boundaries
     requirements.txt
     pages/
         01_Explore_Map.py        # Interactive GeoJSON map with area selection
