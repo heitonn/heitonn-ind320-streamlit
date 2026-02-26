@@ -22,7 +22,7 @@ def load_geojson():
     try:
         # Get path relative to this file's parent directory
         base_dir = os.path.dirname(os.path.dirname(__file__))
-        geojson_path = os.path.join(base_dir, "file.geojson")
+        geojson_path = os.path.join(base_dir, "assets", "file.geojson")
         with open(geojson_path, "r", encoding="utf-8") as f:
             geojson_data = json.load(f)
         return geojson_data
