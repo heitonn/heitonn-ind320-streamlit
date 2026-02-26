@@ -6,7 +6,7 @@ from pymongo.mongo_client import MongoClient
 
 # imports from utils
 from utils.ui_helpers import choose_price_area
-from utils.load_energy_data import load_energy_data_v2
+from utils.load_energy_data import load_energy_data
 
 # Title and wide layout
 st.set_page_config(page_title="Energy Overview", layout="wide", page_icon="⚡")
@@ -16,6 +16,7 @@ st.info("💡 Tip: Select your region on the Interactive Map page first.")
 
 # loading energy data from mongoDB
 df = load_energy_data_v2() # function in utils/load_energy_data.py
+df = load_energy_data() # function in utils/load_energy_data.py
 
 # Area selection
 chosen_area, row = choose_price_area() # function in utils/ui_helpers.py

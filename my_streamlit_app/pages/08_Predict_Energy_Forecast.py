@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 
 # Import utility functions
 from utils.ui_helpers import choose_price_area
-from utils.load_energy_data import load_energy_data_v2, load_consumption_data
+from utils.load_energy_data import load_energy_data, load_consumption_data
 from utils.weather_data_fetcher import get_weather_data
 from utils.constants import city_data_df
 
@@ -132,7 +132,7 @@ if st.button("Run Forecast", type="primary"):
     with st.spinner("Loading and preparing data..."):
         # Load energy data
         if energy_type == "Production":
-            energy_df = load_energy_data_v2()
+            energy_df = load_energy_data()
             group_col = 'productiongroup'
         else:
             energy_df = load_consumption_data()

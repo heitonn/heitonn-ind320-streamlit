@@ -1,25 +1,26 @@
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import os
 import json
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 # imports from utils
 from utils.constants import city_data_df
-from utils.load_energy_data import load_energy_data_v2, load_consumption_data
+from utils.load_energy_data import load_energy_data, load_consumption_data
 
 # Page config
 st.set_page_config(page_title="Interactive Map", layout="wide", page_icon="🗺️")
 st.title("🗺️ Interactive Energy Map")
 st.markdown("Explore energy production and consumption across Norwegian price areas. Click on cities to select a region for detailed analysis.")
 
+
 # Load GeoJSON file for Norwegian price areas
 @st.cache_data
 def load_geojson():
     try:
         # Get path relative to this file's parent directory
-        import os
         base_dir = os.path.dirname(os.path.dirname(__file__))
         geojson_path = os.path.join(base_dir, "file.geojson")
         with open(geojson_path, "r", encoding="utf-8") as f:
@@ -29,14 +30,15 @@ def load_geojson():
         st.error(f"Error loading GeoJSON file: {e}")
         return None
 
+
 geojson_data = load_geojson()
 
 # Load energy data
-production_df = load_energy_data_v2()
+production_df = load_energy_data()
 consumption_df = None
 try:
     consumption_df = load_consumption_data()
-except Exception as e:
+except Exception:
     st.warning("Consumption data not available. Only production data will be shown.")
 
 # Initialize session state
@@ -57,7 +59,7 @@ with col_settings1:
     available_data_types = ["Production"]
     if consumption_df is not None:
         available_data_types.append("Consumption")
-    
+
     data_type = st.selectbox(
         "Data Type:",
         available_data_types,

@@ -7,7 +7,7 @@ import numpy as np
 
 # Import utility functions
 from utils.ui_helpers import choose_price_area
-from utils.load_energy_data import load_energy_data_v2, load_consumption_data
+from utils.load_energy_data import load_energy_data, load_consumption_data
 from utils.weather_data_fetcher import get_weather_data
 from utils.constants import city_data_df
 
@@ -93,7 +93,7 @@ with st.spinner(f"Loading weather data for {city_name}..."):
 
 with st.spinner(f"Loading energy data for {chosen_area}..."):
     if energy_type == "production":
-        energy_df = load_energy_data_v2()
+        energy_df = load_energy_data()
     else:
         energy_df = load_consumption_data()
     
