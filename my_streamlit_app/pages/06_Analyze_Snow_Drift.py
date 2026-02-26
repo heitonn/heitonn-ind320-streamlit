@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from utils.weather_data_fetcher import get_weather_data
+from utils.ui_helpers import choose_price_area
 from utils.constants import city_data_df
 from utils.snowdrift_calculations import (
     compute_yearly_results,
@@ -14,16 +15,6 @@ st.set_page_config(page_title="Snow Drift Analysis", layout="wide", page_icon="�
 st.title("❄️ Snow Drift Analysis")
 st.markdown("Calculate and visualize snow drift patterns using wind data based on the Tabler (2003) method.")
 
-# Gracefully deciling to calculate snow drift only if a price area has been selected on the map
-if "chosen_area" not in st.session_state or st.session_state.chosen_area is None:
-    st.warning("""
-    ### ⚠️ No price area selected
-    
-    Please go to the **Interactive Map** page and select a price area by clicking one of the city buttons.
-    
-    Then come back to this page to analyze snow drift at that location.
-    """)
-    st.stop()
 
 st.markdown("""
             **Qt (Snow Transport)** or ** Snow drift**is the amount of snow blown by wind, measured in **tonnes per meter** (tonnes/m).
@@ -36,10 +27,8 @@ This analysis calculates how much snow is blown around a given location, which i
 st.divider()
 
 
-
-# Get coordinates for the selected price area
-chosen_area = st.session_state.chosen_area
-area_info = city_data_df[city_data_df['PriceArea'] == chosen_area].iloc[0]
+# Area selection (radio buttons)
+chosen_area, area_info = choose_price_area(show_selector=True)
 lat = area_info['Latitude']
 lon = area_info['Longitude']
 city = area_info['City']
@@ -116,23 +105,23 @@ st.divider()
 @st.cache_data(show_spinner=True)
 def load_multi_year_weather_data(latitude, longitude, start_year, end_year):
     """
-    Load weather data for multiple years using the  get_weather_data from utils/weather_data_fetcher.py.
-    The caches the data to ensure we don't make redundant API calls.
+    Load weather data for multiple years using the get_weather_data from utils/weather_data_fetcher.py.
+    Caches the data to ensure we don't make redundant API calls.
     """
     years = list(range(start_year, end_year + 1))
     df = get_weather_data(latitude, longitude, year=years)
-    
     # Reset index to make 'time' a column
     df = df.reset_index()
-    
     # Define season: if month >= 7, season = current year; otherwise, season = previous year
     df['season'] = df['time'].apply(
         lambda dt: dt.year if dt.month >= 7 else dt.year - 1
     )
-    
     return df
 
-# Load data with spinner
+
+st.divider()
+
+# Data loading with error handling
 with st.spinner(f"Loading weather data for {year_start}-{year_end}..."):
     try:
         df = load_multi_year_weather_data(lat, lon, year_start, year_end)
@@ -149,8 +138,6 @@ with st.spinner(f"Loading weather data for {year_start}-{year_end}..."):
         - Each year requires 1 API call
         """)
         st.stop()
-
-st.divider()
 
 # Calculations
 with st.spinner("Calculating snow drift..."):

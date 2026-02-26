@@ -1,12 +1,12 @@
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import folium
+from streamlit_folium import st_folium
 import os
 import json
 import pandas as pd
 from datetime import timedelta
-
-# imports from utils
 from utils.constants import city_data_df
 from utils.load_energy_data import load_energy_data, load_consumption_data
 
@@ -42,9 +42,6 @@ except Exception:
     st.warning("Consumption data not available. Only production data will be shown.")
 
 # Initialize session state
-if "clicked_coords" not in st.session_state:
-    st.session_state.clicked_coords = None
-
 if "chosen_area" not in st.session_state:
     st.session_state["chosen_area"] = "NO1"  # Default
 
@@ -52,130 +49,57 @@ if "chosen_area" not in st.session_state:
 chosen_area = st.session_state.get("chosen_area", "NO1")
 
 # Settings for data type, group, days
-col_settings1, col_settings2, col_settings3 = st.columns([2, 2, 1])
 
-with col_settings1:
-    # Only show data types that are available
-    available_data_types = ["Production"]
-    if consumption_df is not None:
-        available_data_types.append("Consumption")
 
+# Restore dropdowns for energy type and group at the top
+col_type, col_group = st.columns(2)
+available_data_types = ["Production"]
+if consumption_df is not None:
+    available_data_types.append("Consumption")
+with col_type:
     data_type = st.selectbox(
-        "Data Type:",
+        "Energi type:",
         available_data_types,
         key="data_type",
-        label_visibility="collapsed",
-        help="Select Production or Consumption data"
+        help="Velg produksjon eller konsum"
     )
-
-# Select the appropriate dataframe based on data type
-if data_type == "Production":
-    df = production_df
-else:
-    df = consumption_df if consumption_df is not None else production_df
-
-with col_settings2:
-    # Get available production/consumption groups based on selected data type
+    df = production_df.copy() if data_type == "Production" else (consumption_df.copy() if consumption_df is not None else production_df.copy())
+    df_grouped = df.copy()
+with col_group:
     if data_type == "Production":
         available_groups = df['productiongroup'].unique().tolist()
         selected_group = st.selectbox(
-            "Group:", 
+            "Type:", 
             available_groups, 
             key="prod_group",
-            label_visibility="collapsed",
-            help="Select energy production group"
+            help="Velg produksjonsgruppe"
         )
+        if selected_group != "Total":
+            df_grouped = df[df['productiongroup'] == selected_group]
     else:
-        # Consumption groups
         if 'consumptiongroup' in df.columns:
             available_groups = df['consumptiongroup'].unique().tolist()
             selected_group = st.selectbox(
-                "Group:", 
+                "Type:", 
                 available_groups, 
                 key="cons_group",
-                label_visibility="collapsed",
-                help="Select consumption group"
+                help="Velg konsumgruppe"
             )
+        if selected_group != "Total":
+            df_grouped = df[df['consumptiongroup'] == selected_group]
         else:
             selected_group = "Total"
 
-with col_settings3:
-    # Days slider
-    st.markdown("### Days")
-    days = st.slider(
-        "Days:", 
-        1, 7, 30,
-        key="days",
-        label_visibility="collapsed",
-        help="Time interval in days"
-    )
+# Month/year selection in right column
+# Filter df by group
 
-# Calculate mean values per area for choropleth
-end_date = df['starttime'].max()
-start_date = end_date - timedelta(days=days)
-
-# Show the actual date range being displayed
-st.caption(f"📅 Data from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
-
-df_filtered = df[(df['starttime'] >= start_date) & (df['starttime'] <= end_date)]
-
-# Filter by group if not "Total"
-if data_type == "Production" and selected_group != "Total":
-    df_filtered = df_filtered[df_filtered['productiongroup'] == selected_group]
-elif data_type == "Consumption" and selected_group != "Total":
-    if 'consumptiongroup' in df_filtered.columns:
-        df_filtered = df_filtered[df_filtered['consumptiongroup'] == selected_group]
-
-# Calculate area statistics
+# Month/year selection will be handled in col_info, so initialize df_filtered here for area_stats
+st.divider()
+df_filtered = df_grouped.copy()
+# Calculate area statistics for map coloring
 area_stats = df_filtered.groupby('area')['quantitykwh'].agg(['mean', 'sum', 'max']).reset_index()
 area_stats.columns = ['area', 'mean_kwh', 'total_kwh', 'peak_kwh']
 area_means = area_stats.set_index('area')['mean_kwh'].to_dict()
-
-# Price area selection from utils/constants.py
-areas_from_constants = city_data_df['PriceArea'].drop_duplicates().tolist()
-
-# Sort areas numerically (NO1, NO2, ..., NO5)
-def _area_sort_key(a):
-    return int(str(a).replace('NO', '').strip())
-
-available_areas = sorted(areas_from_constants, key=_area_sort_key)
-
-cols = st.columns(len(available_areas))
-for idx, area in enumerate(available_areas):
-    with cols[idx]:
-        # Get city name for this area from city_data_df in utils/constants.py
-        city_name = city_data_df[city_data_df['PriceArea'] == area]['City'].values[0]
-        area_value = area_means.get(area, 0)
-        
-        # display value energy data 
-        if area_value == 0: # no data for area
-            value_display = "0 kWh"
-        elif area_value < 1000:
-            value_display = f"{area_value:.0f} kWh" # show actual value
-        else:
-            value_display = f"{area_value/1000:.1f}k kWh" # show in 'k kWh' format
-        
-        # display button with selected area highlighted
-        #selected area bolded
-        if area == chosen_area:
-            button_label = f"**{city_name}**\n{value_display}" # displays selected area 
-            button_type = "primary"
-        # not selected area no bolded
-        else:
-            button_label = f"{city_name}\n{value_display}"
-            button_type = "secondary"
-        
-        # display button
-        if st.button(
-            button_label, 
-            key=f"btn_{area}",
-            use_container_width=True,
-            type=button_type,
-            help=f"Select {area} - {city_name}",
-            disabled=(area == chosen_area)
-        ):
-            st.session_state["chosen_area"] = area
-            st.rerun()
 
 st.divider()
 
@@ -186,6 +110,7 @@ if geojson_data:
 
     with col_map:
         # Prepare data for choropleth
+        available_areas = city_data_df["PriceArea"].drop_duplicates().tolist()
         map_data = pd.DataFrame([
             {"area": area, "mean_kwh": area_means.get(area, 0)}
             for area in available_areas
@@ -209,7 +134,7 @@ if geojson_data:
             ],
             mapbox_style="carto-positron",
             center={"lat": 65, "lon": 15},
-            zoom=3.5, #zoom level mapped to norway 
+            zoom=4,  #zoom level mapped to norway 
             opacity=0.6,
             labels={'mean_kwh': 'Mean Energy (kWh)'},
             hover_name='area',
@@ -270,56 +195,97 @@ if geojson_data:
         )
         
         # Display the map
-        st.plotly_chart(fig, use_container_width=True, key="price_area_map")
+        center_lat = city_data_df['Latitude'].mean()
+        center_lon = city_data_df['Longitude'].mean()
+        center_lat = 65.5 
+        center_lon = 15.0
+        folium_map = folium.Map(location=[center_lat, center_lon], zoom_start=5, tiles="cartodbpositron", zoom_control=False)
+
+        # Legg til GeoJSON med klikkbare områder
+        gj = folium.GeoJson(
+            geojson_data,
+            name="Price Areas",
+            style_function=lambda x: {
+                'fillColor': '#3388ff',
+                'color': 'black',
+                'weight': 2,
+                'fillOpacity': 0.3
+            },
+            highlight_function=lambda x: {
+                'fillColor': '#ffaf00',
+                'color': 'red',
+                'weight': 3,
+                'fillOpacity': 0.5
+            },
+            tooltip=folium.GeoJsonTooltip(fields=['ElSpotOmr'], aliases=['Area:']),
+        )
+        gj.add_to(folium_map)
+
+        # Legg til city markers
+        for _, row in city_data_df.iterrows():
+            folium.Marker(
+                location=[row['Latitude'], row['Longitude']],
+                popup=f"{row['City']} ({row['PriceArea']})",
+                icon=folium.Icon(color='blue', icon='info-sign')
+            ).add_to(folium_map)
+
+        # Vis kart og fang klikk
+        map_data = st_folium(folium_map, width=600, height=1000)
+
+        # Oppdater valgt område hvis klikk
+        if map_data and map_data.get('last_active_drawing'):
+            feature = map_data['last_active_drawing']
+            if 'properties' in feature and 'ElSpotOmr' in feature['properties']:
+                area_clicked = feature['properties']['ElSpotOmr'].replace(' ', '')
+                st.session_state['chosen_area'] = area_clicked
+                st.rerun()
 
     # RIGHT SIDE: INFORMATION PANEL 
     with col_info:
         # Show selected area and city
         city_info = city_data_df[city_data_df['PriceArea'] == chosen_area].iloc[0]
         st.markdown(f"### 📍 {chosen_area}, {city_info['City']}")
-    
-        
+
+        # Month and year selection dropdowns
+        st.markdown("##### Velg periode")
+        col_month, col_year = st.columns(2)
+        months = df_grouped['month'].unique().tolist()
+        years = sorted(df_grouped['year'].unique().tolist())
+        with col_month:
+            chosen_month = st.selectbox("Måned:", months, key="map_month")
+        with col_year:
+            chosen_year = st.selectbox("År:", years, key="map_year")
+
         # Show current settings
-        st.markdown("##### Current View")
+        st.markdown("##### Gjeldende visning")
         st.markdown(f"""
         - **Type:** {data_type}
         - **Group:** {selected_group}
-        - **Period:** Last {days} days
+        - **Period:** {chosen_month} {chosen_year}
         """)
-        
+
         st.divider()
-        
+
         # Show statistics for selected area
-        st.markdown("##### Statistics")
-        
+        st.markdown("##### Statistikker")
+
+        # Filter df_grouped by month/year
+        df_filtered = df_grouped[(df_grouped['month'] == chosen_month) & (df_grouped['year'] == chosen_year)]
         selected_area_data = df_filtered[df_filtered['area'] == chosen_area]
-        
+
         if not selected_area_data.empty:
             mean_val = selected_area_data['quantitykwh'].mean()
             total_val = selected_area_data['quantitykwh'].sum()
             peak_val = selected_area_data['quantitykwh'].max()
         else:
             mean_val = total_val = peak_val = 0
-        
+
         st.markdown(f"""
         - **Mean:** {mean_val:,.0f} kWh
         - **Total:** {total_val/1000:,.0f}k kWh
         - **Peak:** {peak_val:,.0f} kWh
         """)
-        
-        st.divider()
-        
-        # Map legend
-        st.markdown("##### Map Legend")
-        st.markdown("""
-        - **Black border** = Selected area
-        - **Color scale**:
-          - 🔵 Light blue = Low/zero
-          - 🟣 Purple = Medium  
-          - 🔴 Red = High
-        - **Red marker** = Selected city
-        - **Blue markers** = Other cities
-        """)
+
 
 else: # usefull feedback if GeoJSON fails to load
     st.error("⚠️ Could not load GeoJSON file!")

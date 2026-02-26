@@ -1,6 +1,6 @@
 import streamlit as st
+ # ...existing code...
 import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 from statsmodels.tsa.statespace.sarimax import SARIMAX
@@ -34,12 +34,14 @@ st.markdown("""
 """)
 
 # Price area selector
+
 chosen_area, city_info = choose_price_area(show_selector=True)
 lat, lon = city_info['Latitude'], city_info['Longitude']
 city_name = city_info['City']
 
 st.markdown(f"**Selected area:** {chosen_area} ({city_name})")
 st.markdown("---")
+
 
 # Helper to format large energy values into kWh/MWh/GWh/TWh per day
 def format_energy_value(v: float) -> str:

@@ -1,14 +1,9 @@
 import streamlit as st
-import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
-
-#imports for STL and spectrogram
 from statsmodels.tsa.seasonal import STL
 from scipy.signal import spectrogram
-
-# imports from utils
 from utils.load_energy_data import load_energy_data
 from utils.ui_helpers import choose_price_area
 
@@ -16,10 +11,7 @@ from utils.ui_helpers import choose_price_area
 st.set_page_config(page_title="Energy Decomposition", layout="wide", page_icon="📈")
 st.title("📈 Energy Decomposition")
 st.markdown("Analyze energy trends, seasonality, and patterns using STL decomposition and spectrograms.")
-st.info("💡 Tip: Select your region on the Interactive Map page first, then choose a production group to analyze.")
-
 # load energy data from utils/load_energy_data.py
-df = load_energy_data_v2()
 df = load_energy_data()
 
 # choosing area using utils/choose

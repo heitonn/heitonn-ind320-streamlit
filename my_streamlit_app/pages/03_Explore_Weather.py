@@ -9,9 +9,7 @@ from utils.ui_helpers import choose_price_area
 
 st.set_page_config(page_title="Weather Explorer", layout="wide", page_icon="🌤️")
 st.title("🌤️ Weather Data Explorer")
-
 st.markdown("Explore historical weather data for selected Norwegian price areas from 2021-2024.")
-st.info("💡 Tip: Select your region on the Interactive Map page for consistent analysis across all pages.")
 
 # Area selection
 chosen_area, row = choose_price_area()

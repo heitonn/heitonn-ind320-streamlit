@@ -44,8 +44,7 @@ def choose_price_area(show_selector=True):
             labels,
             index=labels.index(current_label) if current_label in labels else 0,
             horizontal=True,
-            key="price_area_radio"
-        )
+            key="price_area_radio")
         
         # Update session state if selection changed
         new_area = label_to_area[selected_label]

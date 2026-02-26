@@ -1,8 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
-from pymongo.mongo_client import MongoClient
 
 # imports from utils
 from utils.ui_helpers import choose_price_area
@@ -12,14 +10,12 @@ from utils.load_energy_data import load_energy_data
 st.set_page_config(page_title="Energy Overview", layout="wide", page_icon="⚡")
 st.title("⚡ Energy Overview")
 st.markdown("Explore energy production and consumption patterns for your selected region.")
-st.info("💡 Tip: Select your region on the Interactive Map page first.")
 
 # loading energy data from mongoDB
-df = load_energy_data_v2() # function in utils/load_energy_data.py
-df = load_energy_data() # function in utils/load_energy_data.py
+df = load_energy_data()
 
 # Area selection
-chosen_area, row = choose_price_area() # function in utils/ui_helpers.py
+chosen_area, row = choose_price_area()
 
 # Dividing page in two columns
 col1, col2 = st.columns(2, gap="large")
@@ -87,7 +83,6 @@ with col2:
     # Plotly line plot
     if not df_filtered.empty:
         df_filtered_sorted = df_filtered.sort_values('starttime')
-        
         fig = px.line(
             df_filtered_sorted,
             x='starttime',

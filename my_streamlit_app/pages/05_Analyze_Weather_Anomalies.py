@@ -1,4 +1,5 @@
 import streamlit as st
+ # ...existing code...
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
@@ -17,13 +18,9 @@ st.title("⚠️ Weather Anomalies Detection")
 st.markdown("Detect unusual weather patterns using Statistical Process Control (SPC) for temperature and Local Outlier Factor (LOF) for precipitation.")
 st.info("💡 Tip: Adjust the detection parameters to find different types of anomalies.")
 
-chosen_area, row =  choose_price_area()
 
-# Change area here
-chosen_area = st.session_state.get("chosen_area")
-
-# Fetch the row 
-row = city_data_df[city_data_df["PriceArea"] == chosen_area].iloc[0]
+# Krever valgt prisområde
+chosen_area, row = choose_price_area()
 
 # Year selection
 year = st.selectbox("Select Year", [2021, 2022, 2023, 2024], index=0)
