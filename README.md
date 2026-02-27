@@ -1,15 +1,13 @@
 # heitonn-ind320-streamlit
 Public repository for project work in IND320.
 
-**Deployed Streamlit App:** https://heitonn-ind320-app-djubejzwip5rtzkik5276s.streamlit.app/
+**Deployed Streamlit App:** [https://heitonn-ind320-app-djubejzwip5rtzkik5276s.streamlit.app/](https://heitonn-ind320-app-jhvix39oc2gc65tftumcbe.streamlit.app/)
 
 ## Structure of the Streamlit App
 ```
 my_streamlit_app/
-    .streamlit/
-        secrets.toml
     Energy_Dashboard.py          # Landing page with navigation
-  assets/file.geojson          # Norwegian price area boundaries
+    assets/file.geojson          # Norwegian price area boundaries
     requirements.txt
     pages/
         01_Explore_Map.py        # Interactive GeoJSON map with area selection
