@@ -12,5 +12,3 @@ openmeteo_requests
 requests_cache
 retry_requests
 scikit-learn
-folium
-streamlit-folium

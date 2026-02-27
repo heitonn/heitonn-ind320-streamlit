@@ -17,7 +17,7 @@ st.markdown("Calculate and visualize snow drift patterns using wind data based o
 
 
 st.markdown("""
-            **Qt (Snow Transport)** or ** Snow drift**is the amount of snow blown by wind, measured in **tonnes per meter** (tonnes/m).
+            **Qt (Snow Transport)** or ** Snow drift** is the amount of snow blown by wind, measured in **tonnes per meter** (tonnes/m).
 This analysis calculates how much snow is blown around a given location, which is important for:
 - Planning snow fences to protect roads and buildings
 - Understanding where snow accumulates
@@ -147,10 +147,6 @@ with st.spinner("Calculating snow drift..."):
 if yearly_results.empty:
     st.error("No complete seasons found in the selected year range.")
     st.stop()
-
-# Results display
-st.subheader("📊 Snow Drift Results")
-
 
 
 # Overall statistics

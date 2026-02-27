@@ -1,57 +1,46 @@
-import streamlit as st
+import streamlit as st 
 
-st.set_page_config(page_title="Energy & Weather Dashboard", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Energy & Weather Dashboard", layout="wide")
 
-st.title("📊 Energy & Weather Analytics Dashboard")
+col_title, col_stats = st.columns([2,1])
 
-st.markdown("""
-Welcome to the Energy & Weather Analytics platform for Norwegian price areas.
-""")
+with col_title:
+    st.title("⚡ Energy & Weather Analytics")
+    st.caption("Explore production, consumption and weather patterns across Norwegian price areas")
 
-st.markdown("---")
+with col_stats:
+    st.metric("Areas", "NO1–NO5")
+    st.metric("Resolution", "Hourly")
 
-# Three-column layout for the three main sections
+st.divider()
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.subheader("Exploration")
+    st.subheader("🔍 Exploration")
     st.markdown("""
-    **Start your analysis here:**
-    - Interactive map with price areas
-    - Energy production & consumption overview
-    - Weather data visualization
-    
-    Get familiar with the data through interactive charts and regional comparisons.
+    - Production & consumption overview  
+    - Daily trends and comparisons  
+    - Weather visualisation  
     """)
-    if st.button("Go to Interactive Map", use_container_width=True, type="primary"):
-        st.switch_page("pages/01_Explore_Map.py")
+    st.button("Go to Energy Overview", use_container_width=True)
 
 with col2:
-    st.subheader("Analysis & Patterns")
+    st.subheader("📈 Analysis")
     st.markdown("""
-    **Deep-dive analysis:**
-    - Energy decomposition (trends, seasonality)
-    - Weather anomaly detection
-    - Snow drift calculations
-    - Weather-energy correlations
-    
-    Discover patterns and relationships in the data.
+    - Decomposition  
+    - Anomaly detection  
+    - Correlations  
     """)
-    if st.button("Explore Analysis Tools", use_container_width=True):
-        st.switch_page("pages/04_Analyze_Energy_Decomposition.py")
+    st.button("Explore Analysis Tools", use_container_width=True)
 
 with col3:
-    st.subheader("Forecasting")
+    st.subheader("🔮 Forecasting")
     st.markdown("""
-    **Predictive modeling:**
-    - SARIMAX forecasting
-    - Configurable parameters
-    - Exogenous weather variables
-    - Confidence intervals
-    
-    Predict future energy production and consumption.
+    - SARIMAX models  
+    - Exogenous variables  
+    - Confidence intervals  
     """)
-    if st.button("Create Forecast", use_container_width=True):
-        st.switch_page("pages/08_Predict_Energy_Forecast.py")
+    st.button("Create Forecast", use_container_width=True)
 
-st.markdown("---")
+st.divider()
