@@ -15,22 +15,22 @@ The app is built with Streamlit and combines data from energy systems and weathe
 ## 📸 Screenshots
 
 ### Exploration – consumption breakdown
-![Consumption](images/consuption.png)
+![Consumption](my_streamlit_app/images/anomalies.png)
 
 ### Correlation between wind speed and production
-![Correlation](images/correlations.png)
+![Correlation](my_streamlit_app/images/correlations.png)
 
 ### Forecasting – wind production
-![Forecast](images/forecast.png)
+![Forecast](my_streamlit_app/images/forecast.png)
 
 ### Snow drift analysis
-![Snow drift](images/snow_drift.png)
+![Snow drift](my_streamlit_app/images/snow_drift.png)
 
 ### Time series decomposition (STL)
-![STL](images/stl.png)
+![STL](my_streamlit_app/images/stl.png)
 
 ### Weather anomaly detection
-![Anomalies](images/anomalies.png)
+![Anomalies](my_streamlit_app/images/anomalies.png)
 
 ---
 
