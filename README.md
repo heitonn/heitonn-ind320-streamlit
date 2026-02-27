@@ -2,7 +2,9 @@
 Public repository for project work in IND320, Data to Decision.
 
 This project is a Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.
-🚀 Live app: https://heitonn-energy-dashboard.streamlit.app/
+
+
+🚀 **Live app**: https://heitonn-energy-dashboard.streamlit.app/
 
 
 ## ⚡ Energy & Weather Analytics Dashboard
