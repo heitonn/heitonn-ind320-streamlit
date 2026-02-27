@@ -1,11 +1,12 @@
 # heitonn-ind320-streamlit
+
+🚀 **Live app**: https://heitonn-energy-dashboard.streamlit.app/
+
 Public repository for project work in IND320, Data to Decision.
 
 This project is a Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.
 
-
-🚀 **Live app**: https://heitonn-energy-dashboard.streamlit.app/
-
+---  
 
 ## ⚡ Energy & Weather Analytics Dashboard
 
@@ -41,29 +42,21 @@ The app is built with Streamlit and combines data from energy systems and weathe
 ### 🔍 Exploration
 
 - Explore energy production and consumption
-
 - View daily trends and seasonal patterns
-
 - Compare across price areas NO1–NO5
-
 - Visualise weather variables
 
 ### 📈 Analysis
 
 - Decompose time series (trend / seasonality)
-
 - Detect weather anomalies
-
 - Analyse correlations between energy and weather
-
 - Compute snow drift indicators
 
 ### 🔮 Forecasting
 
 - Forecast energy production/consumption using SARIMAX
-
 - Include exogenous weather variables
-
 - Visualise prediction intervals
 
 ---
@@ -115,8 +108,6 @@ cluster = "your_cluster"
 ---
 
 ## Data sources 
-- Energy data: Elhub Energy Data API
-https://api.elhub.no/energy-data-api
+- Energy data: Elhub Energy Data API https://api.elhub.no/energy-data-api
 
-- Weather data: Open-Meteo API
-https://open-meteo.com/
+- Weather data: Open-Meteo API https://open-meteo.com/
