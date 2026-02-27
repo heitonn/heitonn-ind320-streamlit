@@ -1,5 +1,6 @@
 # heitonn-ind320-streamlit
-Public repository for project work in IND320.
+Public repository for project work in IND320. A Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.mkdir img
+
 
 **Deployed Streamlit App:** [https://heitonn-ind320-app-djubejzwip5rtzkik5276s.streamlit.app/](https://heitonn-ind320-app-jhvix39oc2gc65tftumcbe.streamlit.app/)
 
@@ -11,60 +12,75 @@ The app is built with Streamlit and combines data from energy systems and weathe
 
 ---
 
-## What you can do in the app
-### 🔍 Exploration
+## 📸 Screenshots
 
-Explore energy production and consumption
+### Exploration – consumption breakdown
+![Consumption](images/explore_consumption.png)
 
-View daily trends and seasonal patterns
+### Correlation between wind speed and production
+![Correlation](images/correlation.png)
 
-Compare across price areas NO1–NO5
+### Forecasting – wind production
+![Forecast](images/forecast.png)
 
-Visualise weather variables
+### Snow drift analysis
+![Snow drift](images/snow_drift.png)
 
-### 📈 Analysis
+### Time series decomposition (STL)
+![STL](images/stl.png)
 
-Decompose time series (trend / seasonality)
-
-Detect weather anomalies
-
-Analyse correlations between energy and weather
-
-Compute snow drift indicators
-
-### 🔮 Forecasting
-
-Forecast energy production/consumption using SARIMAX
-
-Include exogenous weather variables
-
-Visualise prediction intervals
+### Weather anomaly detection
+![Anomalies](images/anomalies.png)
 
 ---
 
+## What you can do in the app
+### 🔍 Exploration
+
+- Explore energy production and consumption
+
+- View daily trends and seasonal patterns
+
+- Compare across price areas NO1–NO5
+
+- Visualise weather variables
+
+### 📈 Analysis
+
+- Decompose time series (trend / seasonality)
+
+- Detect weather anomalies
+
+- Analyse correlations between energy and weather
+
+- Compute snow drift indicators
+
+### 🔮 Forecasting
+
+- Forecast energy production/consumption using SARIMAX
+
+- Include exogenous weather variables
+
+- Visualise prediction intervals
+
+---
+
+
 ## Tech Stack
-```
-Python
+- Python  
+- Streamlit  
+- Pandas / NumPy  
+- Plotly  
+- Statsmodels (SARIMAX)  
+- MongoDB  
+- Open-Meteo API
 
-Streamlit
-
-Pandas / NumPy
-
-Plotly
-
-Statsmodels (SARIMAX)
-
-MongoDB
-
-Open-Meteo API
-
-```
 ## Run the app locally
 
 Clone the repository:
 ``` bash 
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name/my_streamlit_app
+git clone git clone https://github.com/heitonn/heitonn-ind320-streamlit.git
+cd heitonn/heitonn-ind320-streamlit/my_streamlit_app
 
 ```
 
@@ -73,7 +89,7 @@ Install dependencies
 pip install -r requirements.txt
 ```
 
-Runt the app
+Run the app
 ```bash 
 streamlit run Energy_Dashboard.py
 ``` 
