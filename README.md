@@ -1,8 +1,9 @@
 # heitonn-ind320-streamlit
-Public repository for project work in IND320. A Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.mkdir img
+Public repository for project work in IND320, Data to Decision.
 
+This project is a Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.
+🚀 Live app: https://heitonn-energy-dashboard.streamlit.app/
 
-**Deployed Streamlit App:** [https://heitonn-ind320-app-djubejzwip5rtzkik5276s.streamlit.app/](https://heitonn-ind320-app-jhvix39oc2gc65tftumcbe.streamlit.app/)
 
 ## ⚡ Energy & Weather Analytics Dashboard
 
@@ -81,8 +82,8 @@ The app is built with Streamlit and combines data from energy systems and weathe
 
 Clone the repository:
 ``` bash 
-git clone git clone https://github.com/heitonn/heitonn-ind320-streamlit.git
-cd heitonn/heitonn-ind320-streamlit/my_streamlit_app
+git clone https://github.com/heitonn/heitonn-ind320-streamlit.git
+cd heitonn-ind320-streamlit/my_streamlit_app
 
 ```
 
