@@ -75,6 +75,8 @@ The app is built with Streamlit and combines data from energy systems and weathe
 - MongoDB  
 - Open-Meteo API
 
+---
+
 ## Run the app locally
 
 Clone the repository:
@@ -94,6 +96,8 @@ Run the app
 streamlit run Energy_Dashboard.py
 ``` 
 
+---
+
 The app uses **MongoDB credentials** stored in st.secrets.
 
 Create a .streamlit/secrets.toml file:
@@ -104,6 +108,8 @@ password = "your_password"
 cluster = "your_cluster"
 
 ```
+
+---
 
 ## Data sources 
 - Energy data: Elhub Energy Data API
