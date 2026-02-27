@@ -15,7 +15,7 @@ The app is built with Streamlit and combines data from energy systems and weathe
 ## 📸 Screenshots
 
 ### Exploration – consumption breakdown
-![Consumption](my_streamlit_app/images/anomalies.png)
+![Consumption](my_streamlit_app/images/consuption.png)
 
 ### Correlation between wind speed and production
 ![Correlation](my_streamlit_app/images/correlations.png)
