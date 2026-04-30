@@ -2,13 +2,11 @@
 
 🚀 **Live app**: https://heitonn-energy-dashboard.streamlit.app/
 
-Public repository for project work in IND320, Data to Decision.
-
 This project is a Streamlit dashboard for analysing Norwegian energy production, consumption and weather data.
 
 ---  
 
-## ⚡ Energy & Weather Analytics Dashboard
+## Energy & Weather Analytics Dashboard
 
 This project is an interactive data dashboard for exploring energy production, energy consumption and weather patterns across Norwegian price areas (NO1–NO5).
 
@@ -16,7 +14,7 @@ The app is built with Streamlit and combines data from energy systems and weathe
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ### Exploration – consumption breakdown
 ![Consumption](my_streamlit_app/images/consuption.png)
