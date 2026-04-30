@@ -1,5 +1,4 @@
 import streamlit as st
- # ...existing code...
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -86,7 +85,7 @@ with col3:
 freq_map = {"Hourly": "H", "Daily": "D", "Weekly": "W"}
 resample_to = freq_map[resample_freq]
 
-st.markdown("---")
+st.divider()
 
 # Load data
 with st.spinner(f"Loading weather data for {city_name}..."):
@@ -263,27 +262,11 @@ with col3:
 with col4:
     st.metric("Std Deviation", f"{correlation.std():.3f}")
 
-# Find extreme correlation periods
-st.subheader("🔍 Extreme Correlation Periods")
 
-# Find top 5 positive and negative correlation windows
-correlation_sorted = correlation.dropna().sort_values()
-top_negative = correlation_sorted.head(5)
-top_positive = correlation_sorted.tail(5).iloc[::-1]
-
-col1, col2 = st.columns(2)
-with col1:
-    st.markdown("**Strongest Positive Correlations:**")
-    for time, corr in top_positive.items():
-        st.write(f"- {time.strftime('%Y-%m-%d %H:%M')}: {corr:.3f}")
-
-with col2:
-    st.markdown("**Strongest Negative Correlations:**")
-    for time, corr in top_negative.items():
-        st.write(f"- {time.strftime('%Y-%m-%d %H:%M')}: {corr:.3f}")
 
 # Interpretation help
-st.markdown("---")
+st.divider()
+
 st.markdown("""
 ### Interpretation Guide
 
@@ -299,5 +282,6 @@ st.markdown("""
 **Window size**: Larger windows smooth out short-term fluctuations, smaller windows show more variability.
 """)
 
-st.markdown("---")
+st.divider()
+
 st.caption(f"Data period: {start_time.strftime('%Y-%m-%d')} to {end_time.strftime('%Y-%m-%d')} | Resolution: {resample_freq} | Window: {window_size}h ({window_size_adjusted} {resample_to}) | Lag: {lag}h ({lag_adjusted} {resample_to})")

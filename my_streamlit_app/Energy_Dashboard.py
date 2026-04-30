@@ -11,12 +11,12 @@ st.subheader("Explore how weather, geography and demand shape Norway’s power s
 
 st.markdown(
     """
-    This dashboard investigates energy production and consumption across Norwegian price areas, 
-    with a focus on how weather variables such as temperature, wind and snow conditions relate 
-    to patterns in the power system.
+    Norway’s power system is highly dependent on geography, weather and regional differences. 
+    Cold periods, strong wind, or extreme weather events can all influence the balance 
+    between production and consumption.
 
-    The project combines time series analysis, weather data, anomaly detection and forecasting 
-    to make energy trends easier to explore.
+    This dashboard combines energy and weather time series to make these relationships visible, 
+    highlighting patterns in production, consumption and regional variation over time.
     """
 )
 
@@ -25,16 +25,16 @@ st.divider()
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric("Focus", "Norway")
-    st.write("Compare energy patterns across Norwegian price areas NO1–NO5.")
+    st.metric("Data", "Time series")
+    st.write("Energy production, consumption and weather variables over time.")
 
 with col2:
-    st.metric("Data type", "Time series")
-    st.write("Explore production, consumption, weather variables and seasonal patterns.")
+    st.metric("Methods", "Analysis + ML")
+    st.write("Correlation, anomaly detection and forecasting.")
 
 with col3:
-    st.metric("Methods", "Analysis + ML")
-    st.write("Includes correlation analysis, anomaly detection and forecasting.")
+    st.metric("Scope", "5 price areas")
+    st.write("NO1–NO5 with production by source and sector-level consumption.")
 
 st.divider()
 
@@ -45,31 +45,27 @@ st.markdown(
     **Production and consumption**  
     See how energy use and generation vary over time and between regions.
 
-    **Weather effects**  
-    Investigate how wind, temperature and snow-related variables connect to production and demand.
+    **Weather data**  
+    Explore wind, temperature and precipitation as time series.
 
-    **Seasonality and trends**  
-    Use decomposition and time series tools to separate long-term trends from recurring patterns.
+    **Weather analysis**  
+    Analyze anomalies and derived features such as snow drift.
 
-    **Anomalies and forecasting**  
-    Identify unusual periods and experiment with forecasting using weather as external input.
+    **Energy time series analysis**  
+    Examine production using spectrograms and STL decomposition.
+
+    **Weather–energy relationships**  
+    Investigate correlations and forecasting models using weather as exogenous input.
     """
 )
 
 st.divider()
 
-st.header("Why this project matters")
-
-st.markdown(
-    """
-    Norway’s power system is highly dependent on geography, weather and regional differences. 
-    A cold period in one area, strong wind in another, or snow conditions affecting hydropower 
-    can all influence the balance between production and consumption.
-
-    This dashboard is built to make those relationships visible.
-    """
+st.caption(
+    "Data sources: Energy data from Elhub. Weather data from Open-Meteo. "
+    "Production includes hydro, wind, solar, thermal and other sources. "
+    "Consumption is split into household, cabin and commercial sectors."
 )
 
-st.info(
-    "Use the sidebar to navigate between analysis pages."
-)
+
+st.divider()
