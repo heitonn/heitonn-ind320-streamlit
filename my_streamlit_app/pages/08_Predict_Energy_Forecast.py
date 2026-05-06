@@ -1,8 +1,8 @@
 import streamlit as st
- # ...existing code...
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
+from sklearn.preprocessing import StandardScaler
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 import warnings
 warnings.filterwarnings('ignore')
@@ -187,10 +187,13 @@ if st.button("Run Forecast", type="primary"):
             weather_train_daily = weather_train.resample('D').mean()
             
             # Align with energy data
-            exog_train = weather_train_daily.reindex(energy_daily.index).fillna(method='ffill')
+            exog_train = (
+                weather_train_daily
+                .reindex(energy_daily.index)
+                .ffill()
+                .bfill())
             
             # Standardize exogenous variables to prevent numerical issues such as singular matrix errors
-            from sklearn.preprocessing import StandardScaler
             scaler = StandardScaler()
             exog_train_scaled = pd.DataFrame(
                 scaler.fit_transform(exog_train),
@@ -207,7 +210,13 @@ if st.button("Run Forecast", type="primary"):
                 (weather_df.index <= forecast_end)
             ][exog_vars].copy()
             
-            exog_forecast = weather_forecast.resample('D').mean()
+            exog_forecast = (
+                weather_forecast
+                .resample('D')
+                .mean()
+                .reindex(pd.date_range(forecast_start, periods=forecast_horizon, freq='D'))
+                .ffill()
+                .bfill())
             
             # If we don't have future weather data, use last known values
             if len(exog_forecast) < forecast_horizon:
@@ -334,7 +343,7 @@ if st.button("Run Forecast", type="primary"):
                 legend=dict(x=0.01, y=0.99, bgcolor='rgba(255,255,255,0.8)')
             )
             
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width = 'stretch')
             
             # Forecast statistics
             st.subheader("Forecast Statistics")
@@ -368,7 +377,7 @@ if st.button("Run Forecast", type="primary"):
                     yaxis_title="Residual",
                     height=400
                 )
-                st.plotly_chart(fig_resid, use_container_width=True)
+                st.plotly_chart(fig_resid, width = 'stretch')
                 
                 col1, col2 = st.columns(2)
                 with col1:
