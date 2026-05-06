@@ -146,11 +146,11 @@ weather_series = weather_series[(weather_series.index >= start_time) & (weather_
 energy_series = energy_series[(energy_series.index >= start_time) & (energy_series.index <= end_time)]
 
 # Resample to hourly frequency (fill missing values)
-weather_series = weather_series.resample('H').mean().interpolate()
-energy_series = energy_series.resample('H').sum()
+weather_series = weather_series.resample('h').mean().interpolate()
+energy_series = energy_series.resample('h').sum()
 
 # Now resample to selected resolution if not hourly
-if resample_to != "H":
+if resample_to != "h":
     weather_series = weather_series.resample(resample_to).mean()
     energy_series = energy_series.resample(resample_to).sum()
     
@@ -167,7 +167,7 @@ else:
 
 # Apply lag to weather data
 if lag_adjusted != 0:
-    if resample_to == "H":
+    if resample_to == "h":
         weather_series_lagged = weather_series.copy()
         weather_series_lagged.index = weather_series_lagged.index + timedelta(hours=lag_adjusted)
     elif resample_to == "D":

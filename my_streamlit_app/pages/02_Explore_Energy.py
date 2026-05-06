@@ -118,9 +118,9 @@ with f2:
 st.divider()
 
 
-# -----------------------------
+
 # Layout: Production (left) / Consumption (right)
-# -----------------------------
+
 col_prod, col_cons = st.columns(2, gap="large")
 
 # =========================================================
@@ -162,7 +162,7 @@ with col_prod:
         fig_prod_line.update_layout(height=360, margin=dict(l=20, r=20, t=60, b=40), hovermode="x unified")
         st.plotly_chart(fig_prod_line, use_container_width=True)
     else:
-        st.write("Ingen produksjonsdata for valgt kombinasjon.")
+        st.write("No production data for chosen combination.")
 
     st.divider()
 
@@ -192,7 +192,7 @@ with col_prod:
         fig_prod_pie.update_layout(height=420, margin=dict(l=20, r=20, t=60, b=20))
         st.plotly_chart(fig_prod_pie, use_container_width=True)
     else:
-        st.write("Ingen produksjonsdata for pie chart.")
+        st.write("No production data for pie chart.")
 
 
 # =========================================================
@@ -234,7 +234,7 @@ with col_cons:
         fig_cons_line.update_layout(height=360, margin=dict(l=20, r=20, t=60, b=40), hovermode="x unified")
         st.plotly_chart(fig_cons_line, use_container_width=True)
     else:
-        st.write("Ingen konsumdata for valgt kombinasjon.")
+        st.write("No consume data for chosen combination.")
 
     st.divider()
 
@@ -264,12 +264,10 @@ with col_cons:
         fig_cons_pie.update_layout(height=420, margin=dict(l=20, r=20, t=60, b=20))
         st.plotly_chart(fig_cons_pie, use_container_width=True)
     else:
-        st.write("Ingen konsumdata for pie chart.")
+        st.write("No consume data for pie chart.")
 
 
-# -----------------------------
-# Data source
-# -----------------------------
+# Data source expander
 with st.expander("Data source"):
     st.markdown(
         """
