@@ -89,7 +89,7 @@ with col3:
 
 st.markdown("---")
 st.markdown("**SARIMAX Parameters**")
-st.markdown(""")
+st.markdown("""
 ### Parameter Guide
 - **p, d, q**: Non-seasonal AR, differencing, MA orders
 - **P, D, Q**: Seasonal AR, differencing, MA orders  
